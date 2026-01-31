@@ -378,8 +378,9 @@ const GitHubSync = {
         }
         
         try {
-            // Request device code
-            const response = await fetch('https://github.com/login/device/code', {
+            // Request device code (using CORS proxy for browser compatibility)
+            const corsProxy = 'https://corsproxy.io/?';
+            const response = await fetch(corsProxy + encodeURIComponent('https://github.com/login/device/code'), {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -451,12 +452,13 @@ const GitHubSync = {
     
     async pollForAuthorization(deviceCode, interval) {
         this.deviceFlowCancelled = false;
+        const corsProxy = 'https://corsproxy.io/?';
         
         const poll = async () => {
             if (this.deviceFlowCancelled) return;
             
             try {
-                const response = await fetch('https://github.com/login/oauth/access_token', {
+                const response = await fetch(corsProxy + encodeURIComponent('https://github.com/login/oauth/access_token'), {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
