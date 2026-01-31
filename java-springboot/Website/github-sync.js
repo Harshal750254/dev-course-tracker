@@ -355,7 +355,7 @@ const GitHubSync = {
     },
     
     // ========================================================================
-    // AUTHENTICATION
+    // AUTHENTICATION (Personal Access Token)
     // ========================================================================
     
     handleAuthClick() {
@@ -365,166 +365,124 @@ const GitHubSync = {
                 this.signOut();
             }
         } else {
-            // Start device flow
-            this.startDeviceFlow();
+            // Show PAT input modal
+            this.showPATModal();
         }
     },
     
-    async startDeviceFlow() {
-        // Check if client ID is configured
-        if (GITHUB_CONFIG.clientId === 'YOUR_GITHUB_CLIENT_ID') {
-            alert('GitHub OAuth not configured!\n\nPlease update GITHUB_CONFIG in github-sync.js with your:\n- Client ID (from GitHub OAuth App)\n- GitHub username\n- Repository name');
-            return;
-        }
-        
-        try {
-            // Request device code using proxy that supports POST
-            const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://github.com/login/device/code');
-            
-            console.log('Requesting device code from:', proxyUrl);
-            
-            const response = await fetch(proxyUrl, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `client_id=${GITHUB_CONFIG.clientId}&scope=repo`
-            });
-            
-            console.log('Response status:', response.status);
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Error response:', errorText);
-                throw new Error('Failed to get device code: ' + response.status);
-            }
-            
-            const data = await response.json();
-            console.log('Device code response:', data);
-            
-            if (data.error) {
-                throw new Error(data.error_description || data.error);
-            }
-            
-            // Show modal with device code
-            this.showDeviceFlowModal(data);
-            
-            // Start polling for authorization
-            this.pollForAuthorization(data.device_code, data.interval);
-            
-        } catch (error) {
-            console.error('Device flow error:', error);
-            this.updateUI('error', 'Auth failed');
-            alert('Failed to start GitHub authentication.\n\nError: ' + error.message + '\n\nCheck browser console (F12) for details.');
-        }
-    },
-    
-    showDeviceFlowModal(data) {
+    showPATModal() {
         const modal = document.createElement('div');
         modal.className = 'device-flow-modal';
-        modal.id = 'device-flow-modal';
+        modal.id = 'pat-modal';
         modal.innerHTML = `
             <div class="device-flow-content">
                 <h3>Connect to GitHub</h3>
-                <p>Enter this code at GitHub:</p>
-                <div class="device-code">${data.user_code}</div>
-                <a href="${data.verification_uri}" target="_blank" class="device-flow-link">
-                    Open ${data.verification_uri}
-                </a>
-                <div class="device-flow-spinner">Waiting for authorization...</div>
+                <p>Create a Personal Access Token to sync your progress:</p>
+                
+                <div style="text-align: left; margin: 1rem 0; font-size: 0.85rem; color: var(--text-secondary);">
+                    <ol style="padding-left: 1.2rem; line-height: 1.8;">
+                        <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank" style="color: var(--accent-blue);">GitHub Token Settings</a></li>
+                        <li>Note: "<strong>Progress Sync</strong>"</li>
+                        <li>Expiration: <strong>90 days</strong> (or custom)</li>
+                        <li>Select scope: <strong>repo</strong> (full control)</li>
+                        <li>Click <strong>Generate token</strong></li>
+                        <li>Copy and paste it below</li>
+                    </ol>
+                </div>
+                
+                <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" 
+                    style="width: 100%; padding: 0.75rem; font-family: 'JetBrains Mono', monospace; 
+                    font-size: 0.9rem; background: var(--bg-secondary); border: 1px solid var(--border-color); 
+                    border-radius: 6px; color: var(--text-primary); margin: 0.5rem 0;">
+                
+                <div id="pat-error" style="color: var(--accent-red); font-size: 0.8rem; margin-top: 0.5rem; display: none;"></div>
+                
                 <div class="device-flow-actions">
-                    <button class="primary-btn" onclick="window.open('${data.verification_uri}', '_blank')">
-                        Open GitHub
+                    <button class="primary-btn" onclick="GitHubSync.submitPAT()">
+                        Connect
                     </button>
-                    <button class="secondary-btn" onclick="GitHubSync.cancelDeviceFlow()">
+                    <button class="secondary-btn" onclick="GitHubSync.hidePATModal()">
                         Cancel
                     </button>
                 </div>
+                
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">
+                    Your token is stored locally and only used to sync with your repo.
+                </p>
             </div>
         `;
         document.body.appendChild(modal);
+        
+        // Focus the input
+        setTimeout(() => document.getElementById('pat-input')?.focus(), 100);
+        
+        // Allow Enter key to submit
+        document.getElementById('pat-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.submitPAT();
+        });
     },
     
-    hideDeviceFlowModal() {
-        const modal = document.getElementById('device-flow-modal');
-        if (modal) {
-            modal.remove();
+    hidePATModal() {
+        const modal = document.getElementById('pat-modal');
+        if (modal) modal.remove();
+    },
+    
+    async submitPAT() {
+        const input = document.getElementById('pat-input');
+        const errorEl = document.getElementById('pat-error');
+        const token = input?.value?.trim();
+        
+        if (!token) {
+            errorEl.textContent = 'Please enter a token';
+            errorEl.style.display = 'block';
+            return;
         }
-        this.deviceFlowCancelled = true;
-    },
-    
-    cancelDeviceFlow() {
-        this.hideDeviceFlowModal();
-        this.updateUI('signed-out');
-    },
-    
-    async pollForAuthorization(deviceCode, interval) {
-        this.deviceFlowCancelled = false;
         
-        const poll = async () => {
-            if (this.deviceFlowCancelled) return;
+        if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+            errorEl.textContent = 'Invalid token format. Should start with ghp_ or github_pat_';
+            errorEl.style.display = 'block';
+            return;
+        }
+        
+        // Test the token
+        errorEl.textContent = 'Validating...';
+        errorEl.style.color = 'var(--text-muted)';
+        errorEl.style.display = 'block';
+        
+        try {
+            const response = await fetch('https://api.github.com/user', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
             
-            try {
-                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://github.com/login/oauth/access_token');
-                const response = await fetch(proxyUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `client_id=${GITHUB_CONFIG.clientId}&device_code=${deviceCode}&grant_type=urn:ietf:params:oauth:grant-type:device_code`
-                });
+            if (response.ok) {
+                // Token is valid
+                this.accessToken = token;
+                localStorage.setItem('github_access_token', token);
                 
-                const data = await response.json();
+                this.user = await response.json();
+                localStorage.setItem('github_user', JSON.stringify(this.user));
                 
-                if (data.access_token) {
-                    // Success!
-                    this.accessToken = data.access_token;
-                    localStorage.setItem('github_access_token', data.access_token);
-                    
-                    // Get user info
-                    await this.fetchUserInfo();
-                    
-                    // Hide modal and update UI
-                    this.hideDeviceFlowModal();
-                    this.updateUI('signed-in');
-                    
-                    // Load progress from GitHub
-                    await this.loadProgressFromGitHub();
-                    
-                } else if (data.error === 'authorization_pending') {
-                    // Keep polling
-                    setTimeout(poll, (interval || 5) * 1000);
-                    
-                } else if (data.error === 'slow_down') {
-                    // Increase interval
-                    setTimeout(poll, (interval + 5) * 1000);
-                    
-                } else if (data.error === 'expired_token') {
-                    this.hideDeviceFlowModal();
-                    this.updateUI('error', 'Expired');
-                    alert('Authorization expired. Please try again.');
-                    
-                } else if (data.error === 'access_denied') {
-                    this.hideDeviceFlowModal();
-                    this.updateUI('signed-out');
-                    
-                } else {
-                    console.error('Auth error:', data);
-                    setTimeout(poll, (interval || 5) * 1000);
-                }
+                this.hidePATModal();
+                this.updateUI('signed-in');
                 
-            } catch (error) {
-                console.error('Polling error:', error);
-                if (!this.deviceFlowCancelled) {
-                    setTimeout(poll, (interval || 5) * 1000);
-                }
+                // Load progress from GitHub
+                await this.loadProgressFromGitHub();
+                
+            } else if (response.status === 401) {
+                errorEl.textContent = 'Invalid or expired token. Please check and try again.';
+                errorEl.style.color = 'var(--accent-red)';
+            } else {
+                errorEl.textContent = 'Error validating token: ' + response.status;
+                errorEl.style.color = 'var(--accent-red)';
             }
-        };
-        
-        // Start polling
-        setTimeout(poll, (interval || 5) * 1000);
+        } catch (error) {
+            console.error('Token validation error:', error);
+            errorEl.textContent = 'Network error. Please try again.';
+            errorEl.style.color = 'var(--accent-red)';
+        }
     },
     
     async validateToken() {
