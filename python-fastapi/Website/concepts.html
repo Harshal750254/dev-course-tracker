@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Concepts | Priority-Based Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #262c36;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-green: #009688;
+            --accent-green-bright: #26a69a;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --accent-cyan: #39c5cf;
+            --accent-teal: #009688;
+            --gradient-start: #0d1117;
+            --gradient-end: #161b22;
+            --critical-bg: rgba(248, 81, 73, 0.1);
+            --critical-border: rgba(248, 81, 73, 0.3);
+            --important-bg: rgba(240, 136, 62, 0.1);
+            --important-border: rgba(240, 136, 62, 0.3);
+            --good-bg: rgba(88, 166, 255, 0.1);
+            --good-border: rgba(88, 166, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-green-bright);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: ">";
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-green-bright);
+            background: rgba(0, 150, 136, 0.15);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.6rem 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        .filter-btn.critical.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        .filter-btn.important.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
+
+        .filter-btn.good.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Priority Sections */
+        .priority-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .priority-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .priority-badge.critical {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border: 1px solid var(--critical-border);
+        }
+
+        .priority-badge.important {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border: 1px solid var(--important-border);
+        }
+
+        .priority-badge.good {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border: 1px solid var(--good-border);
+        }
+
+        .priority-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .priority-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Concept Cards Grid */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+        }
+
+        .concept-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .concept-card.critical::before {
+            background: var(--accent-red);
+        }
+
+        .concept-card.important::before {
+            background: var(--accent-orange);
+        }
+
+        .concept-card.good::before {
+            background: var(--accent-blue);
+        }
+
+        .concept-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .concept-card.checked {
+            opacity: 0.6;
+        }
+
+        .concept-card.checked::after {
+            content: '✓ Learned';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-green-bright);
+            background: rgba(0, 150, 136, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .concept-checkbox {
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+
+        .concept-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 18px;
+            width: 18px;
+        }
+
+        .concept-checkmark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox:hover .concept-checkmark {
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkmark::after {
+            content: "✓";
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .concept-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .concept-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .concept-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .concept-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-card.critical .concept-tag {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border-color: var(--critical-border);
+        }
+
+        .concept-card.important .concept-tag {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border-color: var(--important-border);
+        }
+
+        .concept-card.good .concept-tag {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border-color: var(--good-border);
+        }
+
+        /* Hidden cards when filtered */
+        .concept-card.hidden {
+            display: none;
+        }
+
+        .priority-section.hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.critical { background: var(--accent-red); }
+        .legend-color.important { background: var(--accent-orange); }
+        .legend-color.good { background: var(--accent-blue); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .nav-content {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                gap: 1rem;
+            }
+
+            .filter-section {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .legend {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">FastAPI_Plan</a>
+            <div class="nav-links">
+                <a href="index.html">Weekly Schedule</a>
+                <a href="concepts.html" class="active">FastAPI Concepts</a>
+                <a href="python-core.html">Python Core</a>
+                <a href="postgresql.html">PostgreSQL</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>FastAPI Concepts</h1>
+            <p>Priority-Based Learning Hierarchy (P0-P4)</p>
+        </header>
+
+        <section class="progress-section">
+            <div class="progress-header">
+                <h2>Concepts Mastered</h2>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="completed-count">0</div>
+                        <div class="stat-label">Learned</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="total-count">25</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="percent-complete">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color critical"></span>
+                <span>Critical (P0-P1) - Must Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color important"></span>
+                <span>Important (P2-P3) - Should Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color good"></span>
+                <span>Good to Know (P4)</span>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all" onclick="filterConcepts('all')">All Concepts</button>
+            <button class="filter-btn critical" data-filter="critical" onclick="filterConcepts('critical')">Critical</button>
+            <button class="filter-btn important" data-filter="important" onclick="filterConcepts('important')">Important</button>
+            <button class="filter-btn good" data-filter="good" onclick="filterConcepts('good')">Good to Know</button>
+        </div>
+
+        <!-- P0 - FastAPI Core -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">P0</span>
+                <span class="priority-title">FastAPI Core</span>
+                <span class="priority-count" id="p0-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="p0-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">ASGI and Async Fundamentals</span>
+                    </div>
+                    <p class="concept-description">FastAPI is built on Starlette (ASGI framework). ASGI enables async request handling. Use async def for I/O-bound operations, def for CPU-bound tasks.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">ASGI</span>
+                        <span class="concept-tag">Starlette</span>
+                        <span class="concept-tag">async/await</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Path Operations (Decorators)</span>
+                    </div>
+                    <p class="concept-description">@app.get(), @app.post(), @app.put(), @app.delete() define API endpoints. Each decorator maps HTTP methods to Python functions. Path determines the URL route.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@app.get</span>
+                        <span class="concept-tag">@app.post</span>
+                        <span class="concept-tag">Routes</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Dependency Injection System</span>
+                    </div>
+                    <p class="concept-description">Depends() injects dependencies into path operations. Enables code reuse, testing, and separation of concerns. Dependencies can have their own dependencies (nested).</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Depends</span>
+                        <span class="concept-tag">DI</span>
+                        <span class="concept-tag">Injection</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Request/Response Models</span>
+                    </div>
+                    <p class="concept-description">Pydantic models define request body schema and response structure. FastAPI auto-validates incoming data and serializes responses. Use response_model for output typing.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">BaseModel</span>
+                        <span class="concept-tag">response_model</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Automatic OpenAPI Documentation</span>
+                    </div>
+                    <p class="concept-description">FastAPI auto-generates OpenAPI schema from type hints. Interactive docs at /docs (Swagger UI) and /redoc. Customize with tags, descriptions, and examples.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">/docs</span>
+                        <span class="concept-tag">/redoc</span>
+                        <span class="concept-tag">OpenAPI</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P1 - Data Handling -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">P1</span>
+                <span class="priority-title">Data Handling</span>
+                <span class="priority-count" id="p1-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="p1-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Pydantic Models and Validation</span>
+                    </div>
+                    <p class="concept-description">Pydantic BaseModel provides automatic validation, serialization, and documentation. Use Field() for constraints like min_length, regex, gt/lt. Validators for custom logic.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">BaseModel</span>
+                        <span class="concept-tag">Field</span>
+                        <span class="concept-tag">validator</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Path Parameters</span>
+                    </div>
+                    <p class="concept-description">Extract values from URL path: /users/{user_id}. Type hints enable automatic validation. Use Path() for additional constraints and metadata.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">{param}</span>
+                        <span class="concept-tag">Path()</span>
+                        <span class="concept-tag">Type Hints</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Query Parameters</span>
+                    </div>
+                    <p class="concept-description">Parameters after ? in URL: /items?skip=0&limit=10. Optional with default values. Use Query() for validation, alias, and deprecation markers.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Query()</span>
+                        <span class="concept-tag">Optional</span>
+                        <span class="concept-tag">Default Values</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Request Body Handling</span>
+                    </div>
+                    <p class="concept-description">JSON body automatically parsed into Pydantic models. Use Body() for additional metadata. Supports multiple body parameters and nested models.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Body()</span>
+                        <span class="concept-tag">JSON</span>
+                        <span class="concept-tag">Nested Models</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Response Models and Status Codes</span>
+                    </div>
+                    <p class="concept-description">response_model filters output fields. status_code sets HTTP response code. Use status module for readable codes. Multiple response types with responses parameter.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">response_model</span>
+                        <span class="concept-tag">status_code</span>
+                        <span class="concept-tag">responses</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P2 - Database Integration -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">P2</span>
+                <span class="priority-title">Database Integration</span>
+                <span class="priority-count" id="p2-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="p2-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">SQLAlchemy 2.0 with Async</span>
+                    </div>
+                    <p class="concept-description">Modern SQLAlchemy with async support. Use create_async_engine and AsyncSession. asyncpg driver for PostgreSQL provides excellent performance.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">SQLAlchemy 2.0</span>
+                        <span class="concept-tag">AsyncSession</span>
+                        <span class="concept-tag">asyncpg</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p2-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">ORM Models and Relationships</span>
+                    </div>
+                    <p class="concept-description">Define tables with SQLAlchemy ORM. relationship() for associations. mapped_column() for typed columns. ForeignKey for relationships between tables.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">DeclarativeBase</span>
+                        <span class="concept-tag">relationship</span>
+                        <span class="concept-tag">ForeignKey</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p2-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Session Management</span>
+                    </div>
+                    <p class="concept-description">AsyncSession manages database transactions. Use dependency injection to provide sessions. Context managers ensure proper cleanup. Commit on success, rollback on error.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">AsyncSession</span>
+                        <span class="concept-tag">commit</span>
+                        <span class="concept-tag">rollback</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p2-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Alembic Migrations</span>
+                    </div>
+                    <p class="concept-description">Database schema versioning and migrations. alembic init, revision --autogenerate, upgrade/downgrade commands. Track changes in version control.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Alembic</span>
+                        <span class="concept-tag">Migrations</span>
+                        <span class="concept-tag">autogenerate</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p2-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Repository Pattern</span>
+                    </div>
+                    <p class="concept-description">Abstract database operations behind repository classes. Separates business logic from data access. Easier testing with mock repositories. Single responsibility principle.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Repository</span>
+                        <span class="concept-tag">Abstraction</span>
+                        <span class="concept-tag">Clean Code</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P3 - Security -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">P3</span>
+                <span class="priority-title">Security</span>
+                <span class="priority-count" id="p3-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="p3-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">OAuth2 Password Flow</span>
+                    </div>
+                    <p class="concept-description">Standard authentication flow for first-party apps. User sends username/password, receives access token. OAuth2PasswordBearer handles token extraction from headers.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">OAuth2</span>
+                        <span class="concept-tag">OAuth2PasswordBearer</span>
+                        <span class="concept-tag">Token</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">JWT Tokens</span>
+                    </div>
+                    <p class="concept-description">JSON Web Tokens for stateless authentication. Contains header, payload, signature. python-jose library for creation and validation. Set expiration time for security.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">JWT</span>
+                        <span class="concept-tag">python-jose</span>
+                        <span class="concept-tag">Bearer</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Password Hashing</span>
+                    </div>
+                    <p class="concept-description">Never store plain text passwords! Use passlib with bcrypt for secure hashing. CryptContext handles hashing and verification. Automatic salt generation.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">passlib</span>
+                        <span class="concept-tag">bcrypt</span>
+                        <span class="concept-tag">CryptContext</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Security Dependencies</span>
+                    </div>
+                    <p class="concept-description">Create reusable security dependencies like get_current_user. Chain dependencies for role checks. Raise HTTPException(401/403) for unauthorized access.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">get_current_user</span>
+                        <span class="concept-tag">Depends</span>
+                        <span class="concept-tag">HTTPException</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">CORS Configuration</span>
+                    </div>
+                    <p class="concept-description">Cross-Origin Resource Sharing for frontend access. CORSMiddleware configures allowed origins, methods, headers. Essential for single-page applications.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">CORS</span>
+                        <span class="concept-tag">CORSMiddleware</span>
+                        <span class="concept-tag">Origins</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P4 - Advanced Patterns -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">P4</span>
+                <span class="priority-title">Advanced Patterns</span>
+                <span class="priority-count" id="p4-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="p4-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Background Tasks</span>
+                    </div>
+                    <p class="concept-description">Run tasks after returning response. BackgroundTasks parameter for email sending, logging, etc. Tasks run in same process - use Celery for heavy work.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">BackgroundTasks</span>
+                        <span class="concept-tag">add_task</span>
+                        <span class="concept-tag">Async</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p4-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">WebSockets</span>
+                    </div>
+                    <p class="concept-description">Real-time bidirectional communication. @app.websocket decorator for endpoints. Handle connect, receive, send events. Great for chat, notifications, live updates.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">WebSocket</span>
+                        <span class="concept-tag">Real-time</span>
+                        <span class="concept-tag">Bidirectional</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p4-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Middleware</span>
+                    </div>
+                    <p class="concept-description">Process requests before/after route handlers. Add timing, logging, authentication. @app.middleware("http") decorator or BaseHTTPMiddleware class.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Middleware</span>
+                        <span class="concept-tag">@app.middleware</span>
+                        <span class="concept-tag">Request/Response</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p4-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Lifespan Events</span>
+                    </div>
+                    <p class="concept-description">Startup and shutdown logic with @asynccontextmanager lifespan. Initialize database pools, load ML models on startup. Clean up resources on shutdown.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">lifespan</span>
+                        <span class="concept-tag">startup</span>
+                        <span class="concept-tag">shutdown</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p4-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">APIRouter and Sub-applications</span>
+                    </div>
+                    <p class="concept-description">Organize routes into modules with APIRouter. Include routers with prefix and tags. Mount sub-applications for microservice patterns or versioning.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">APIRouter</span>
+                        <span class="concept-tag">include_router</span>
+                        <span class="concept-tag">mount</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Built for learning FastAPI | <a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI Docs</a> | <a href="https://docs.pydantic.dev/" target="_blank">Pydantic Docs</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize state from localStorage
+        function loadState() {
+            const checkboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                const saved = localStorage.getItem('fastapi-concepts-' + id);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    card.classList.add('checked');
+                }
+            });
+            updateProgress();
+        }
+
+        // Save state to localStorage
+        function saveState(id, checked) {
+            localStorage.setItem('fastapi-concepts-' + id, checked);
+        }
+
+        // Filter concepts by priority
+        function filterConcepts(filter) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide sections and cards
+            const sections = document.querySelectorAll('.priority-section');
+            
+            sections.forEach(section => {
+                const priority = section.dataset.priority;
+                
+                if (filter === 'all') {
+                    section.classList.remove('hidden');
+                } else if (filter === priority) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+
+        // Update progress
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            const total = allCheckboxes.length;
+            let completed = 0;
+
+            // Update individual cards and count
+            allCheckboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                
+                if (checkbox.checked) {
+                    completed++;
+                    card.classList.add('checked');
+                } else {
+                    card.classList.remove('checked');
+                }
+                
+                saveState(id, checkbox.checked);
+            });
+
+            // Update overall progress
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('percent-complete').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+
+            // Update priority section counts
+            const priorities = ['p0', 'p1', 'p2', 'p3', 'p4'];
+            priorities.forEach(priority => {
+                const cards = document.querySelectorAll(`.concept-card[data-id^="${priority}-"]`);
+                const sectionTotal = cards.length;
+                let sectionCompleted = 0;
+                
+                cards.forEach(card => {
+                    const checkbox = card.querySelector('input[type="checkbox"]');
+                    if (checkbox && checkbox.checked) sectionCompleted++;
+                });
+                
+                const countElement = document.getElementById(`${priority}-count`);
+                if (countElement) {
+                    countElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadState);
+    </script>
+    
+    <!-- GitHub Progress Sync -->
+    <script src="github-sync.js"></script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Course Tracker | Learning Roadmaps</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #262c36;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-green: #009688;
+            --accent-green-bright: #26a69a;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --gradient-start: #0d1117;
+            --gradient-end: #161b22;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: ">";
+            color: var(--accent-green-bright);
+        }
+
+        header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-green-bright), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .feature-icon.green { background: rgba(0, 150, 136, 0.2); color: var(--accent-green-bright); }
+        .feature-icon.blue { background: rgba(88, 166, 255, 0.2); color: var(--accent-blue); }
+        .feature-icon.purple { background: rgba(163, 113, 247, 0.2); color: var(--accent-purple); }
+
+        /* Course Cards */
+        .courses {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .course-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .course-card.fastapi::before {
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-green-bright));
+        }
+
+        .course-card.springboot::before {
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow));
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--text-muted);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .course-card:hover::before {
+            height: 6px;
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .course-card.fastapi .course-icon {
+            background: rgba(0, 150, 136, 0.15);
+        }
+
+        .course-card.springboot .course-icon {
+            background: rgba(240, 136, 62, 0.15);
+        }
+
+        .course-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .course-card.fastapi .stat-value {
+            color: var(--accent-green-bright);
+        }
+
+        .course-card.springboot .stat-value {
+            color: var(--accent-orange);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .course-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .course-card.fastapi .topic-tag {
+            background: rgba(0, 150, 136, 0.1);
+            color: var(--accent-green-bright);
+            border-color: rgba(0, 150, 136, 0.2);
+        }
+
+        .course-card.springboot .topic-tag {
+            background: rgba(240, 136, 62, 0.1);
+            color: var(--accent-orange);
+            border-color: rgba(240, 136, 62, 0.2);
+        }
+
+        .course-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .course-card.fastapi .course-link {
+            color: var(--accent-green-bright);
+        }
+
+        .course-card.springboot .course-link {
+            color: var(--accent-orange);
+        }
+
+        .course-link::after {
+            content: '→';
+            transition: transform 0.2s ease;
+        }
+
+        .course-card:hover .course-link::after {
+            transform: translateX(4px);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-badge.active {
+            background: rgba(0, 150, 136, 0.15);
+            color: var(--accent-green-bright);
+        }
+
+        .status-badge.coming {
+            background: rgba(139, 148, 158, 0.15);
+            color: var(--text-secondary);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .course-card.fastapi .progress-bar {
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-green-bright));
+        }
+
+        .course-card.springboot .progress-bar {
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow));
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .github-link:hover {
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 2rem 0;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .features {
+                gap: 1rem;
+            }
+
+            .courses {
+                grid-template-columns: 1fr;
+            }
+
+            .course-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">dev_course_tracker</div>
+            <h1>Learning Roadmaps</h1>
+            <p>Interactive checklists and progress tracking for mastering backend development technologies</p>
+        </header>
+
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon green">✓</span>
+                <span>Interactive Checklists</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon blue">↻</span>
+                <span>GitHub Sync</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon purple">◎</span>
+                <span>Progress Tracking</span>
+            </div>
+        </div>
+
+        <div class="courses">
+            <!-- FastAPI Course -->
+            <a href="python-fastapi/Website/index.html" class="course-card fastapi">
+                <span class="status-badge active">Active</span>
+                <div class="course-icon">🐍</div>
+                <h2 class="course-title">Python FastAPI</h2>
+                <p class="course-subtitle">6-Week Intensive Backend Development</p>
+                
+                <div class="course-stats">
+                    <div class="stat">
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Weeks</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">42+</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Pages</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="fastapi-progress" style="width: 0%"></div>
+                </div>
+
+                <div class="course-topics">
+                    <span class="topic-tag">FastAPI</span>
+                    <span class="topic-tag">Pydantic</span>
+                    <span class="topic-tag">SQLAlchemy</span>
+                    <span class="topic-tag">PostgreSQL</span>
+                    <span class="topic-tag">Docker</span>
+                </div>
+
+                <span class="course-link">Start Learning</span>
+            </a>
+
+            <!-- Spring Boot Course -->
+            <a href="java-springboot/Website/index.html" class="course-card springboot">
+                <span class="status-badge coming">In Progress</span>
+                <div class="course-icon">☕</div>
+                <h2 class="course-title">Java Spring Boot</h2>
+                <p class="course-subtitle">Enterprise Backend Development</p>
+                
+                <div class="course-stats">
+                    <div class="stat">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Weeks</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Pages</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="springboot-progress" style="width: 0%"></div>
+                </div>
+
+                <div class="course-topics">
+                    <span class="topic-tag">Spring Boot</span>
+                    <span class="topic-tag">Spring Data</span>
+                    <span class="topic-tag">JPA</span>
+                    <span class="topic-tag">REST APIs</span>
+                    <span class="topic-tag">Security</span>
+                </div>
+
+                <span class="course-link">View Roadmap</span>
+            </a>
+        </div>
+
+        <footer>
+            <p>Built for tracking learning progress</p>
+            <a href="https://github.com/Harshal750254/Planning" class="github-link">
+                <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                View on GitHub
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        // Load progress from localStorage and update progress bars
+        function loadProgress() {
+            // FastAPI progress
+            let fastapiCompleted = 0;
+            let fastapiTotal = 0;
+            
+            const fastapiPrefixes = ['fastapi-checklist-', 'fastapi-concepts-', 'python-core-', 'postgresql-'];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                for (const prefix of fastapiPrefixes) {
+                    if (key.startsWith(prefix)) {
+                        fastapiTotal++;
+                        if (localStorage.getItem(key) === 'true') {
+                            fastapiCompleted++;
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            // Update FastAPI progress bar
+            if (fastapiTotal > 0) {
+                const fastapiPercent = Math.round((fastapiCompleted / fastapiTotal) * 100);
+                document.getElementById('fastapi-progress').style.width = fastapiPercent + '%';
+            }
+            
+            // Spring Boot progress (if available)
+            let springbootCompleted = 0;
+            let springbootTotal = 0;
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('springboot-') || key.startsWith('java-core-')) {
+                    springbootTotal++;
+                    if (localStorage.getItem(key) === 'true') {
+                        springbootCompleted++;
+                    }
+                }
+            }
+            
+            if (springbootTotal > 0) {
+                const springbootPercent = Math.round((springbootCompleted / springbootTotal) * 100);
+                document.getElementById('springboot-progress').style.width = springbootPercent + '%';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadProgress);
+    </script>
+</body>
+</html>

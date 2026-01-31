@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring Boot Concepts | Priority-Based Learning</title>
+    <title>PostgreSQL Fundamentals | Database Learning</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,14 +15,15 @@
             --text-secondary: #8b949e;
             --text-muted: #6e7681;
             --border-color: #30363d;
-            --accent-green: #238636;
-            --accent-green-bright: #3fb950;
+            --accent-green: #009688;
+            --accent-green-bright: #26a69a;
             --accent-blue: #58a6ff;
             --accent-purple: #a371f7;
             --accent-orange: #f0883e;
             --accent-red: #f85149;
             --accent-yellow: #d29922;
             --accent-cyan: #39c5cf;
+            --accent-indigo: #6366f1;
             --gradient-start: #0d1117;
             --gradient-end: #161b22;
             --critical-bg: rgba(248, 81, 73, 0.1);
@@ -90,16 +91,17 @@
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.75rem;
             border-radius: 6px;
             transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -108,8 +110,8 @@
         }
 
         .nav-links a.active {
-            color: var(--accent-green-bright);
-            background: rgba(35, 134, 54, 0.15);
+            color: var(--accent-indigo);
+            background: rgba(99, 102, 241, 0.15);
         }
 
         /* Header */
@@ -123,7 +125,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -173,7 +175,7 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--accent-purple);
+            color: var(--accent-indigo);
         }
 
         .stat-label {
@@ -191,10 +193,37 @@
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            background: linear-gradient(90deg, var(--accent-indigo), var(--accent-cyan));
             border-radius: 8px;
             transition: width 0.5s ease;
         }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.critical { background: var(--accent-red); }
+        .legend-color.important { background: var(--accent-orange); }
+        .legend-color.good { background: var(--accent-blue); }
 
         /* Filter Section */
         .filter-section {
@@ -219,13 +248,13 @@
         }
 
         .filter-btn:hover {
-            border-color: var(--accent-purple);
+            border-color: var(--accent-indigo);
             color: var(--text-primary);
         }
 
         .filter-btn.active {
-            background: var(--accent-purple);
-            border-color: var(--accent-purple);
+            background: var(--accent-indigo);
+            border-color: var(--accent-indigo);
             color: white;
         }
 
@@ -357,7 +386,7 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.7rem;
             color: var(--accent-green-bright);
-            background: rgba(35, 134, 54, 0.15);
+            background: rgba(0, 150, 136, 0.15);
             padding: 0.2rem 0.5rem;
             border-radius: 3px;
         }
@@ -489,33 +518,6 @@
             text-decoration: none;
         }
 
-        /* Legend */
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-        }
-
-        .legend-color.critical { background: var(--accent-red); }
-        .legend-color.important { background: var(--accent-orange); }
-        .legend-color.good { background: var(--accent-blue); }
-
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -528,6 +530,19 @@
 
             .nav-content {
                 padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
             }
 
             .concepts-grid {
@@ -556,24 +571,25 @@
 <body>
     <nav>
         <div class="nav-content">
-            <a href="index.html" class="logo">SpringBoot_Plan</a>
+            <a href="index.html" class="logo">FastAPI_Plan</a>
             <div class="nav-links">
                 <a href="index.html">Weekly Schedule</a>
-                <a href="concepts.html" class="active">Spring Concepts</a>
-                <a href="java-core.html">Java Core</a>
+                <a href="concepts.html">FastAPI Concepts</a>
+                <a href="python-core.html">Python Core</a>
+                <a href="postgresql.html" class="active">PostgreSQL</a>
             </div>
         </div>
     </nav>
 
     <div class="container">
         <header>
-            <h1>Core Concepts</h1>
-            <p>Priority-Based Learning Hierarchy (P0-P8)</p>
+            <h1>PostgreSQL Fundamentals</h1>
+            <p>Database Concepts from Beginner to Production</p>
         </header>
 
         <section class="progress-section">
             <div class="progress-header">
-                <h2>Concepts Mastered</h2>
+                <h2>PostgreSQL Concepts Mastered</h2>
                 <div class="progress-stats">
                     <div class="stat">
                         <div class="stat-value" id="completed-count">0</div>
@@ -601,11 +617,11 @@
             </div>
             <div class="legend-item">
                 <span class="legend-color important"></span>
-                <span>Important (P3-P6) - Should Know</span>
+                <span>Important (P3-P4) - Should Know</span>
             </div>
             <div class="legend-item">
                 <span class="legend-color good"></span>
-                <span>Good to Know (P7-P8)</span>
+                <span>Good to Know (P5-P6)</span>
             </div>
         </div>
 
@@ -616,11 +632,11 @@
             <button class="filter-btn good" data-filter="good" onclick="filterConcepts('good')">Good to Know</button>
         </div>
 
-        <!-- P0 - Spring Core Container -->
+        <!-- P0 - Database Basics -->
         <section class="priority-section" data-priority="critical">
             <div class="priority-header">
                 <span class="priority-badge critical">P0</span>
-                <span class="priority-title">Spring Core Container</span>
+                <span class="priority-title">Database Basics</span>
                 <span class="priority-count" id="p0-count">0/5</span>
             </div>
             <div class="concepts-grid">
@@ -630,12 +646,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Inversion of Control (IoC)</span>
+                        <span class="concept-title">Relational Database Concepts</span>
                     </div>
-                    <p class="concept-description">The framework manages object creation and wiring instead of the developer. The ApplicationContext is the IoC container that manages Bean lifecycles.</p>
+                    <p class="concept-description">Data organized in tables (relations) with rows and columns. Tables have defined schema. Relationships connect tables. ACID properties ensure data integrity.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">ApplicationContext</span>
-                        <span class="concept-tag">Container</span>
+                        <span class="concept-tag">Tables</span>
+                        <span class="concept-tag">Rows</span>
+                        <span class="concept-tag">Columns</span>
+                        <span class="concept-tag">ACID</span>
                     </div>
                 </div>
 
@@ -645,12 +663,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Dependency Injection (DI)</span>
+                        <span class="concept-title">Primary Keys and Identifiers</span>
                     </div>
-                    <p class="concept-description">Dependencies are "injected" into objects by the container rather than created by the object itself. Enables loose coupling and easier testing.</p>
+                    <p class="concept-description">Unique identifier for each row. Can be single column or composite. Common types: SERIAL (auto-increment), UUID, or natural keys. Must be unique and NOT NULL.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Autowired</span>
-                        <span class="concept-tag">Loose Coupling</span>
+                        <span class="concept-tag">PRIMARY KEY</span>
+                        <span class="concept-tag">SERIAL</span>
+                        <span class="concept-tag">UUID</span>
                     </div>
                 </div>
 
@@ -660,12 +679,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Constructor vs Setter vs Field Injection</span>
+                        <span class="concept-title">Data Types</span>
                     </div>
-                    <p class="concept-description">Constructor injection is preferred for mandatory dependencies (allows final fields). Field injection (@Autowired on fields) is discouraged as it hides dependencies.</p>
+                    <p class="concept-description">INTEGER/BIGINT for numbers. VARCHAR(n)/TEXT for strings. BOOLEAN for true/false. TIMESTAMP/DATE for time. NUMERIC for precise decimals. Choose appropriate types for data.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Constructor Injection</span>
-                        <span class="concept-tag">Best Practice</span>
+                        <span class="concept-tag">INTEGER</span>
+                        <span class="concept-tag">VARCHAR</span>
+                        <span class="concept-tag">TIMESTAMP</span>
+                        <span class="concept-tag">BOOLEAN</span>
                     </div>
                 </div>
 
@@ -675,13 +696,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Bean Scopes</span>
+                        <span class="concept-title">NULL Values and Constraints</span>
                     </div>
-                    <p class="concept-description">Singleton (default): one instance per container. Prototype: new instance each request. Request/Session: tied to HTTP lifecycle. Singleton beans must be stateless!</p>
+                    <p class="concept-description">NULL means "unknown" - not empty string or zero. NOT NULL constraint requires a value. DEFAULT sets value when not provided. Handle NULLs carefully in queries.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Singleton</span>
-                        <span class="concept-tag">Prototype</span>
-                        <span class="concept-tag">Request</span>
+                        <span class="concept-tag">NULL</span>
+                        <span class="concept-tag">NOT NULL</span>
+                        <span class="concept-tag">DEFAULT</span>
                     </div>
                 </div>
 
@@ -691,23 +712,23 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Component Scanning & Stereotypes</span>
+                        <span class="concept-title">Installing PostgreSQL</span>
                     </div>
-                    <p class="concept-description">@Component, @Service, @Repository, @Controller mark classes as Spring-managed beans. Component scanning auto-detects these annotations.</p>
+                    <p class="concept-description">Local install or Docker: docker run -e POSTGRES_PASSWORD=pass -p 5432:5432 postgres. Connect with psql or GUI tools like pgAdmin, DBeaver, or DataGrip.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Component</span>
-                        <span class="concept-tag">@Service</span>
-                        <span class="concept-tag">@Repository</span>
+                        <span class="concept-tag">Docker</span>
+                        <span class="concept-tag">psql</span>
+                        <span class="concept-tag">pgAdmin</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- P1 - Spring Boot Internals -->
+        <!-- P1 - Essential SQL -->
         <section class="priority-section" data-priority="critical">
             <div class="priority-header">
                 <span class="priority-badge critical">P1</span>
-                <span class="priority-title">Spring Boot Internals</span>
+                <span class="priority-title">Essential SQL</span>
                 <span class="priority-count" id="p1-count">0/5</span>
             </div>
             <div class="concepts-grid">
@@ -717,12 +738,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">@SpringBootApplication</span>
+                        <span class="concept-title">SELECT and WHERE</span>
                     </div>
-                    <p class="concept-description">Combines @Configuration, @EnableAutoConfiguration, and @ComponentScan. The entry point annotation for Spring Boot applications.</p>
+                    <p class="concept-description">SELECT columns FROM table WHERE conditions. Use * for all columns (avoid in production). WHERE filters rows with =, <>, <, >, LIKE, IN, BETWEEN, IS NULL.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Entry Point</span>
-                        <span class="concept-tag">Main Class</span>
+                        <span class="concept-tag">SELECT</span>
+                        <span class="concept-tag">WHERE</span>
+                        <span class="concept-tag">LIKE</span>
+                        <span class="concept-tag">IN</span>
                     </div>
                 </div>
 
@@ -732,12 +755,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Auto-Configuration Mechanism</span>
+                        <span class="concept-title">INSERT, UPDATE, DELETE</span>
                     </div>
-                    <p class="concept-description">Spring Boot scans classpath for libraries and auto-configures beans. Uses @Conditional annotations to decide what to configure. Debug with --debug flag.</p>
+                    <p class="concept-description">INSERT INTO table (cols) VALUES (vals). UPDATE table SET col=val WHERE condition. DELETE FROM table WHERE condition. Always use WHERE with UPDATE/DELETE!</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@EnableAutoConfiguration</span>
-                        <span class="concept-tag">Conditionals</span>
+                        <span class="concept-tag">INSERT</span>
+                        <span class="concept-tag">UPDATE</span>
+                        <span class="concept-tag">DELETE</span>
+                        <span class="concept-tag">RETURNING</span>
                     </div>
                 </div>
 
@@ -747,12 +772,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">@Conditional Annotations</span>
+                        <span class="concept-title">ORDER BY, LIMIT, OFFSET</span>
                     </div>
-                    <p class="concept-description">@ConditionalOnClass, @ConditionalOnMissingBean control when auto-config activates. Allows defaults to "back off" when you define custom beans.</p>
+                    <p class="concept-description">ORDER BY col ASC/DESC for sorting. LIMIT n returns first n rows. OFFSET n skips first n rows. Combine for pagination: LIMIT 10 OFFSET 20.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@ConditionalOnClass</span>
-                        <span class="concept-tag">@ConditionalOnMissingBean</span>
+                        <span class="concept-tag">ORDER BY</span>
+                        <span class="concept-tag">LIMIT</span>
+                        <span class="concept-tag">OFFSET</span>
+                        <span class="concept-tag">Pagination</span>
                     </div>
                 </div>
 
@@ -762,12 +789,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Spring Boot Starters</span>
+                        <span class="concept-title">Aggregate Functions</span>
                     </div>
-                    <p class="concept-description">Dependency descriptors that bundle related libraries. spring-boot-starter-web pulls in Spring MVC, Jackson, Tomcat, etc. Simplifies dependency management.</p>
+                    <p class="concept-description">COUNT(*) counts rows. SUM(col), AVG(col) for math. MIN(col), MAX(col) for extremes. NULL values are ignored except COUNT(*). Use with GROUP BY.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">starter-web</span>
-                        <span class="concept-tag">starter-data-jpa</span>
+                        <span class="concept-tag">COUNT</span>
+                        <span class="concept-tag">SUM</span>
+                        <span class="concept-tag">AVG</span>
+                        <span class="concept-tag">MIN/MAX</span>
                     </div>
                 </div>
 
@@ -777,23 +806,24 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Bill of Materials (BOM)</span>
+                        <span class="concept-title">GROUP BY and HAVING</span>
                     </div>
-                    <p class="concept-description">spring-boot-dependencies manages versions of transitive dependencies. Solves "JAR hell" by ensuring compatible library versions.</p>
+                    <p class="concept-description">GROUP BY groups rows for aggregation. SELECT category, COUNT(*) FROM products GROUP BY category. HAVING filters groups (like WHERE for aggregates).</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Version Management</span>
-                        <span class="concept-tag">Parent POM</span>
+                        <span class="concept-tag">GROUP BY</span>
+                        <span class="concept-tag">HAVING</span>
+                        <span class="concept-tag">Aggregation</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- P2 - RESTful Web Services -->
+        <!-- P2 - Table Design -->
         <section class="priority-section" data-priority="critical">
             <div class="priority-header">
                 <span class="priority-badge critical">P2</span>
-                <span class="priority-title">RESTful Web Services</span>
-                <span class="priority-count" id="p2-count">0/6</span>
+                <span class="priority-title">Table Design</span>
+                <span class="priority-count" id="p2-count">0/5</span>
             </div>
             <div class="concepts-grid">
                 <div class="concept-card critical" data-id="p2-1">
@@ -802,12 +832,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">@RestController vs @Controller</span>
+                        <span class="concept-title">CREATE TABLE and ALTER TABLE</span>
                     </div>
-                    <p class="concept-description">@RestController includes @ResponseBody, serializing return values directly to JSON. @Controller returns view names for template engines like Thymeleaf.</p>
+                    <p class="concept-description">CREATE TABLE name (columns with types and constraints). ALTER TABLE ADD/DROP/MODIFY columns. DROP TABLE removes table. Use IF EXISTS/IF NOT EXISTS for safety.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@RestController</span>
-                        <span class="concept-tag">@ResponseBody</span>
+                        <span class="concept-tag">CREATE TABLE</span>
+                        <span class="concept-tag">ALTER TABLE</span>
+                        <span class="concept-tag">DROP TABLE</span>
                     </div>
                 </div>
 
@@ -817,13 +848,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Request Mapping Annotations</span>
+                        <span class="concept-title">Foreign Keys and Relationships</span>
                     </div>
-                    <p class="concept-description">@GetMapping, @PostMapping, @PutMapping, @PatchMapping, @DeleteMapping for HTTP method-specific routing. Use correct semantics!</p>
+                    <p class="concept-description">FOREIGN KEY references another table's primary key. Enforces referential integrity. One-to-Many: FK in "many" table. Many-to-Many: junction table with two FKs.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@GetMapping</span>
-                        <span class="concept-tag">@PostMapping</span>
-                        <span class="concept-tag">@RequestMapping</span>
+                        <span class="concept-tag">FOREIGN KEY</span>
+                        <span class="concept-tag">REFERENCES</span>
+                        <span class="concept-tag">One-to-Many</span>
                     </div>
                 </div>
 
@@ -833,13 +864,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Path and Query Parameters</span>
+                        <span class="concept-title">Indexes and Performance</span>
                     </div>
-                    <p class="concept-description">@PathVariable extracts from URL path (/users/{id}). @RequestParam extracts query params (?name=value). @RequestBody deserializes JSON body.</p>
+                    <p class="concept-description">CREATE INDEX speeds up WHERE, ORDER BY, JOIN on indexed columns. B-tree default. Trade-off: faster reads, slower writes. EXPLAIN ANALYZE to check query plans.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@PathVariable</span>
-                        <span class="concept-tag">@RequestParam</span>
-                        <span class="concept-tag">@RequestBody</span>
+                        <span class="concept-tag">CREATE INDEX</span>
+                        <span class="concept-tag">B-tree</span>
+                        <span class="concept-tag">EXPLAIN ANALYZE</span>
                     </div>
                 </div>
 
@@ -849,12 +880,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">JSON Serialization (Jackson)</span>
+                        <span class="concept-title">Constraints</span>
                     </div>
-                    <p class="concept-description">Jackson auto-converts Java objects to/from JSON. Use @JsonIgnore, @JsonProperty for customization. Configure ObjectMapper for date formats, etc.</p>
+                    <p class="concept-description">UNIQUE ensures no duplicates. CHECK validates values (CHECK (price > 0)). FOREIGN KEY for relationships. Constraints maintain data integrity at database level.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Jackson</span>
-                        <span class="concept-tag">ObjectMapper</span>
+                        <span class="concept-tag">UNIQUE</span>
+                        <span class="concept-tag">CHECK</span>
+                        <span class="concept-tag">Integrity</span>
                     </div>
                 </div>
 
@@ -864,38 +896,25 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">DTOs vs Entities</span>
+                        <span class="concept-title">Normalization Basics</span>
                     </div>
-                    <p class="concept-description">Never expose JPA entities directly! DTOs define API contracts, decouple internal models from public API. Use Records for immutable DTOs. MapStruct for mapping.</p>
+                    <p class="concept-description">Organize data to reduce redundancy. 1NF: no repeating groups. 2NF: no partial dependencies. 3NF: no transitive dependencies. Balance normalization with query performance.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Data Transfer Objects</span>
-                        <span class="concept-tag">Records</span>
-                    </div>
-                </div>
-
-                <div class="concept-card critical" data-id="p2-6">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Global Exception Handling</span>
-                    </div>
-                    <p class="concept-description">@ControllerAdvice + @ExceptionHandler provide centralized error handling. Return standardized error responses with proper HTTP status codes.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">@ControllerAdvice</span>
-                        <span class="concept-tag">@ExceptionHandler</span>
+                        <span class="concept-tag">1NF</span>
+                        <span class="concept-tag">2NF</span>
+                        <span class="concept-tag">3NF</span>
+                        <span class="concept-tag">Redundancy</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- P3 - Data Persistence -->
+        <!-- P3 - Joins and Relationships -->
         <section class="priority-section" data-priority="important">
             <div class="priority-header">
                 <span class="priority-badge important">P3</span>
-                <span class="priority-title">Data Persistence</span>
-                <span class="priority-count" id="p3-count">0/6</span>
+                <span class="priority-title">Joins and Relationships</span>
+                <span class="priority-count" id="p3-count">0/5</span>
             </div>
             <div class="concepts-grid">
                 <div class="concept-card important" data-id="p3-1">
@@ -904,12 +923,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Spring Data JPA</span>
+                        <span class="concept-title">INNER JOIN</span>
                     </div>
-                    <p class="concept-description">Abstraction over JPA/Hibernate. Reduces boilerplate by generating repository implementations from interface definitions at runtime.</p>
+                    <p class="concept-description">Returns rows where both tables have matching values. SELECT * FROM orders JOIN users ON orders.user_id = users.id. Most common join type.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">JpaRepository</span>
-                        <span class="concept-tag">CrudRepository</span>
+                        <span class="concept-tag">INNER JOIN</span>
+                        <span class="concept-tag">ON</span>
+                        <span class="concept-tag">Match</span>
                     </div>
                 </div>
 
@@ -919,13 +939,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Entity Mapping</span>
+                        <span class="concept-title">LEFT/RIGHT/FULL JOIN</span>
                     </div>
-                    <p class="concept-description">@Entity marks JPA entities. @Id + @GeneratedValue for primary keys. @Column for field customization. @Table for table naming.</p>
+                    <p class="concept-description">LEFT JOIN: all left table rows + matching right. RIGHT JOIN: opposite. FULL JOIN: all rows from both. NULLs for non-matching rows. Use for optional relationships.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Entity</span>
-                        <span class="concept-tag">@Id</span>
-                        <span class="concept-tag">@Column</span>
+                        <span class="concept-tag">LEFT JOIN</span>
+                        <span class="concept-tag">RIGHT JOIN</span>
+                        <span class="concept-tag">FULL OUTER JOIN</span>
                     </div>
                 </div>
 
@@ -935,12 +955,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Repository Pattern</span>
+                        <span class="concept-title">Self-Joins</span>
                     </div>
-                    <p class="concept-description">Extend JpaRepository<Entity, ID> to get full CRUD for free. Spring generates implementation at runtime using proxies.</p>
+                    <p class="concept-description">Join table to itself using aliases. Useful for hierarchical data (employees reporting to managers) or comparing rows within same table.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Repository Interface</span>
-                        <span class="concept-tag">Proxy</span>
+                        <span class="concept-tag">Self-Join</span>
+                        <span class="concept-tag">Alias</span>
+                        <span class="concept-tag">Hierarchy</span>
                     </div>
                 </div>
 
@@ -950,12 +971,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Derived Query Methods</span>
+                        <span class="concept-title">Junction Tables (Many-to-Many)</span>
                     </div>
-                    <p class="concept-description">Spring parses method names to generate queries: findByEmailAndIsActiveTrue() becomes SQL automatically. Magic method naming conventions!</p>
+                    <p class="concept-description">Intermediate table for many-to-many relationships. Contains FKs to both tables. Example: user_roles with user_id and role_id. May have additional columns.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">findBy</span>
-                        <span class="concept-tag">Query Derivation</span>
+                        <span class="concept-tag">Junction Table</span>
+                        <span class="concept-tag">Many-to-Many</span>
+                        <span class="concept-tag">Bridge Table</span>
                     </div>
                 </div>
 
@@ -965,38 +987,23 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">JPQL and Native Queries</span>
+                        <span class="concept-title">Cascading Actions</span>
                     </div>
-                    <p class="concept-description">@Query annotation for custom JPQL or native SQL. Use for complex joins and optimizations. Named parameters with :paramName.</p>
+                    <p class="concept-description">ON DELETE CASCADE: delete child rows when parent deleted. ON UPDATE CASCADE: update FKs when PK changes. SET NULL/SET DEFAULT alternatives. Handle carefully!</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Query</span>
-                        <span class="concept-tag">JPQL</span>
-                        <span class="concept-tag">Native SQL</span>
-                    </div>
-                </div>
-
-                <div class="concept-card important" data-id="p3-6">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Transaction Management</span>
-                    </div>
-                    <p class="concept-description">@Transactional ensures ACID properties. Understand propagation levels. Beware: calling @Transactional from same class bypasses proxy!</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">@Transactional</span>
-                        <span class="concept-tag">Propagation</span>
+                        <span class="concept-tag">ON DELETE CASCADE</span>
+                        <span class="concept-tag">ON UPDATE</span>
+                        <span class="concept-tag">SET NULL</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- P4 - Configuration Management -->
+        <!-- P4 - Advanced Queries -->
         <section class="priority-section" data-priority="important">
             <div class="priority-header">
                 <span class="priority-badge important">P4</span>
-                <span class="priority-title">Configuration Management</span>
+                <span class="priority-title">Advanced Queries</span>
                 <span class="priority-count" id="p4-count">0/5</span>
             </div>
             <div class="concepts-grid">
@@ -1006,12 +1013,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">application.properties / yml</span>
+                        <span class="concept-title">Subqueries</span>
                     </div>
-                    <p class="concept-description">Central configuration files in src/main/resources. YAML offers hierarchical structure. Properties for flat key-value pairs.</p>
+                    <p class="concept-description">Query inside another query. In WHERE: WHERE id IN (SELECT ...). In FROM: FROM (SELECT ...) AS subquery. Correlated subqueries reference outer query.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">application.yml</span>
-                        <span class="concept-tag">application.properties</span>
+                        <span class="concept-tag">Subquery</span>
+                        <span class="concept-tag">IN</span>
+                        <span class="concept-tag">EXISTS</span>
                     </div>
                 </div>
 
@@ -1021,12 +1029,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">@Value Annotation</span>
+                        <span class="concept-title">CTEs (WITH Clause)</span>
                     </div>
-                    <p class="concept-description">Inject single property values: @Value("${app.name}"). Supports SpEL expressions and default values: @Value("${port:8080}").</p>
+                    <p class="concept-description">Common Table Expressions: WITH name AS (query) SELECT ... Named temporary result sets. More readable than nested subqueries. Can be recursive for hierarchies.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Value</span>
-                        <span class="concept-tag">SpEL</span>
+                        <span class="concept-tag">WITH</span>
+                        <span class="concept-tag">CTE</span>
+                        <span class="concept-tag">RECURSIVE</span>
                     </div>
                 </div>
 
@@ -1036,12 +1045,13 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">@ConfigurationProperties</span>
+                        <span class="concept-title">UNION, INTERSECT, EXCEPT</span>
                     </div>
-                    <p class="concept-description">Type-safe configuration binding. Map groups of properties to POJOs. Better than @Value for complex configs. Enable with @EnableConfigurationProperties.</p>
+                    <p class="concept-description">UNION: combine results (removes duplicates, UNION ALL keeps them). INTERSECT: rows in both queries. EXCEPT: rows in first but not second. Columns must match.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@ConfigurationProperties</span>
-                        <span class="concept-tag">Type-safe</span>
+                        <span class="concept-tag">UNION</span>
+                        <span class="concept-tag">INTERSECT</span>
+                        <span class="concept-tag">EXCEPT</span>
                     </div>
                 </div>
 
@@ -1051,12 +1061,14 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Profiles (dev/prod)</span>
+                        <span class="concept-title">Window Functions</span>
                     </div>
-                    <p class="concept-description">Environment-specific configs with @Profile and application-{profile}.yml. Activate with spring.profiles.active. Prevent credential hardcoding!</p>
+                    <p class="concept-description">Calculations across row sets without grouping. ROW_NUMBER(), RANK(), DENSE_RANK() for ordering. LAG/LEAD access adjacent rows. OVER(PARTITION BY ... ORDER BY ...).</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Profile</span>
-                        <span class="concept-tag">application-dev.yml</span>
+                        <span class="concept-tag">ROW_NUMBER</span>
+                        <span class="concept-tag">RANK</span>
+                        <span class="concept-tag">LAG/LEAD</span>
+                        <span class="concept-tag">OVER</span>
                     </div>
                 </div>
 
@@ -1066,336 +1078,204 @@
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Environment Variables</span>
+                        <span class="concept-title">CASE Expressions</span>
                     </div>
-                    <p class="concept-description">Override properties via env vars: SPRING_DATASOURCE_PASSWORD. 12-factor app compliance. Essential for containerized deployments.</p>
+                    <p class="concept-description">Conditional logic in SQL. CASE WHEN condition THEN result ELSE default END. Use for conditional columns, bucketing data, or dynamic ordering.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Environment Vars</span>
-                        <span class="concept-tag">12-Factor</span>
+                        <span class="concept-tag">CASE</span>
+                        <span class="concept-tag">WHEN</span>
+                        <span class="concept-tag">THEN</span>
+                        <span class="concept-tag">Conditional</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- P5 - Testing -->
-        <section class="priority-section" data-priority="important">
+        <!-- P5 - PostgreSQL-Specific Features -->
+        <section class="priority-section" data-priority="good">
             <div class="priority-header">
-                <span class="priority-badge important">P5</span>
-                <span class="priority-title">Testing</span>
+                <span class="priority-badge good">P5</span>
+                <span class="priority-title">PostgreSQL-Specific Features</span>
                 <span class="priority-count" id="p5-count">0/5</span>
             </div>
             <div class="concepts-grid">
-                <div class="concept-card important" data-id="p5-1">
+                <div class="concept-card good" data-id="p5-1">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">JUnit 5</span>
+                        <span class="concept-title">JSON/JSONB Columns</span>
                     </div>
-                    <p class="concept-description">Modern testing framework. @Test, @BeforeEach, @AfterEach for lifecycle. @DisplayName for readable test names. Assertions and assumptions.</p>
+                    <p class="concept-description">Store JSON data in columns. JSONB is binary, faster for queries. Access with -> (JSON) and ->> (text). @> for containment. GIN indexes for fast searches.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Test</span>
-                        <span class="concept-tag">Assertions</span>
+                        <span class="concept-tag">JSONB</span>
+                        <span class="concept-tag">-></span>
+                        <span class="concept-tag">->></span>
+                        <span class="concept-tag">@></span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p5-2">
+                <div class="concept-card good" data-id="p5-2">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Mockito</span>
+                        <span class="concept-title">Arrays</span>
                     </div>
-                    <p class="concept-description">Mock dependencies for isolated unit testing. @Mock creates mocks, @InjectMocks injects them. when().thenReturn() for stubbing behavior.</p>
+                    <p class="concept-description">Array column type: INTEGER[], TEXT[]. Access with [index] (1-based). ANY/ALL for comparisons. array_agg() to build arrays. Useful for tags, preferences.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@Mock</span>
-                        <span class="concept-tag">@InjectMocks</span>
-                        <span class="concept-tag">when/thenReturn</span>
+                        <span class="concept-tag">ARRAY[]</span>
+                        <span class="concept-tag">ANY</span>
+                        <span class="concept-tag">array_agg</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p5-3">
+                <div class="concept-card good" data-id="p5-3">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">@SpringBootTest</span>
+                        <span class="concept-title">Full-Text Search</span>
                     </div>
-                    <p class="concept-description">Loads full application context for integration testing. Powerful but slower. Use for end-to-end testing of multiple layers working together.</p>
+                    <p class="concept-description">tsvector for searchable documents. tsquery for search terms. @@ operator for matching. GIN/GiST indexes. to_tsvector(), plainto_tsquery() functions.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@SpringBootTest</span>
-                        <span class="concept-tag">Integration Test</span>
+                        <span class="concept-tag">tsvector</span>
+                        <span class="concept-tag">tsquery</span>
+                        <span class="concept-tag">@@</span>
+                        <span class="concept-tag">GIN</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p5-4">
+                <div class="concept-card good" data-id="p5-4">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Slice Tests</span>
+                        <span class="concept-title">Primary Key Strategies</span>
                     </div>
-                    <p class="concept-description">@WebMvcTest loads only web layer, mocks services. @DataJpaTest loads only persistence layer with in-memory DB. Faster than full context.</p>
+                    <p class="concept-description">SERIAL: auto-increment integer. BIGSERIAL for large tables. UUID: globally unique, good for distributed systems. IDENTITY (SQL standard alternative to SERIAL).</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">@WebMvcTest</span>
-                        <span class="concept-tag">@DataJpaTest</span>
-                        <span class="concept-tag">MockMvc</span>
+                        <span class="concept-tag">SERIAL</span>
+                        <span class="concept-tag">UUID</span>
+                        <span class="concept-tag">IDENTITY</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p5-5">
+                <div class="concept-card good" data-id="p5-5">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Testcontainers</span>
+                        <span class="concept-title">ENUM Types</span>
                     </div>
-                    <p class="concept-description">Spin up real databases in Docker for tests. Ensures environment parity with production. Eliminates H2 vs PostgreSQL discrepancies.</p>
+                    <p class="concept-description">CREATE TYPE status AS ENUM ('pending', 'active', 'done'). Type-safe, ordered values. Efficient storage. Harder to modify than check constraints. Use for stable value sets.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">Testcontainers</span>
-                        <span class="concept-tag">Docker</span>
+                        <span class="concept-tag">CREATE TYPE</span>
+                        <span class="concept-tag">ENUM</span>
+                        <span class="concept-tag">Type Safety</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- P6 - Security -->
-        <section class="priority-section" data-priority="important">
+        <!-- P6 - Administration Basics -->
+        <section class="priority-section" data-priority="good">
             <div class="priority-header">
-                <span class="priority-badge important">P6</span>
-                <span class="priority-title">Security</span>
+                <span class="priority-badge good">P6</span>
+                <span class="priority-title">Administration Basics</span>
                 <span class="priority-count" id="p6-count">0/5</span>
             </div>
             <div class="concepts-grid">
-                <div class="concept-card important" data-id="p6-1">
+                <div class="concept-card good" data-id="p6-1">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Security Filter Chain</span>
+                        <span class="concept-title">Creating Databases and Users</span>
                     </div>
-                    <p class="concept-description">Spring Security operates as a chain of servlet filters intercepting requests. Configure via SecurityFilterChain bean. Order matters!</p>
+                    <p class="concept-description">CREATE DATABASE mydb. CREATE USER username WITH PASSWORD 'pass'. CREATE ROLE for groups. Each app should have its own user with minimal permissions.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">SecurityFilterChain</span>
-                        <span class="concept-tag">Filters</span>
+                        <span class="concept-tag">CREATE DATABASE</span>
+                        <span class="concept-tag">CREATE USER</span>
+                        <span class="concept-tag">CREATE ROLE</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p6-2">
+                <div class="concept-card good" data-id="p6-2">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">Authentication vs Authorization</span>
+                        <span class="concept-title">Permissions (GRANT/REVOKE)</span>
                     </div>
-                    <p class="concept-description">Authentication: "Who are you?" (login). Authorization: "What can you do?" (permissions). AuthenticationManager validates, AccessDecisionManager authorizes.</p>
+                    <p class="concept-description">GRANT SELECT, INSERT ON table TO user. REVOKE DELETE ON table FROM user. Permissions: SELECT, INSERT, UPDATE, DELETE, ALL. Grant on schemas for broader access.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">AuthN</span>
-                        <span class="concept-tag">AuthZ</span>
+                        <span class="concept-tag">GRANT</span>
+                        <span class="concept-tag">REVOKE</span>
+                        <span class="concept-tag">Permissions</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p6-3">
+                <div class="concept-card good" data-id="p6-3">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">UserDetailsService</span>
+                        <span class="concept-title">Backup and Restore</span>
                     </div>
-                    <p class="concept-description">Interface for loading user-specific data. Implement to fetch users from database. Returns UserDetails with username, password, authorities.</p>
+                    <p class="concept-description">pg_dump dbname > backup.sql for logical backup. pg_restore for restoring. pg_dumpall for entire cluster. Schedule regular backups. Test restores!</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">UserDetailsService</span>
-                        <span class="concept-tag">UserDetails</span>
+                        <span class="concept-tag">pg_dump</span>
+                        <span class="concept-tag">pg_restore</span>
+                        <span class="concept-tag">Backup</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p6-4">
+                <div class="concept-card good" data-id="p6-4">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">JWT Implementation</span>
+                        <span class="concept-title">Connection Strings</span>
                     </div>
-                    <p class="concept-description">Stateless authentication with JSON Web Tokens. Client sends token in Authorization header. Custom filter validates and populates SecurityContext.</p>
+                    <p class="concept-description">postgresql://user:password@host:port/database. Use environment variables for credentials. Connection pooling with pgBouncer for production. SSL for security.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">JWT</span>
-                        <span class="concept-tag">Bearer Token</span>
+                        <span class="concept-tag">Connection String</span>
+                        <span class="concept-tag">pgBouncer</span>
+                        <span class="concept-tag">SSL</span>
                     </div>
                 </div>
 
-                <div class="concept-card important" data-id="p6-5">
+                <div class="concept-card good" data-id="p6-5">
                     <div class="concept-header">
                         <label class="concept-checkbox">
                             <input type="checkbox" onchange="updateProgress()">
                             <span class="concept-checkmark"></span>
                         </label>
-                        <span class="concept-title">OAuth2 Basics</span>
+                        <span class="concept-title">psql Command-Line Basics</span>
                     </div>
-                    <p class="concept-description">Delegated authorization ("Login with Google"). Understand flows: Authorization Code, Client Credentials. Spring as Resource Server or OAuth2 Client.</p>
+                    <p class="concept-description">psql -U user -d database to connect. \l list databases. \dt list tables. \d table describe table. \q quit. \i file.sql execute SQL file. Essential for scripting.</p>
                     <div class="concept-tags">
-                        <span class="concept-tag">OAuth2</span>
-                        <span class="concept-tag">OpenID Connect</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- P7 - Observability -->
-        <section class="priority-section" data-priority="good">
-            <div class="priority-header">
-                <span class="priority-badge good">P7</span>
-                <span class="priority-title">Observability</span>
-                <span class="priority-count" id="p7-count">0/4</span>
-            </div>
-            <div class="concepts-grid">
-                <div class="concept-card good" data-id="p7-1">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Spring Boot Actuator</span>
-                    </div>
-                    <p class="concept-description">Production-ready features: /health, /metrics, /info endpoints. Monitor application state. Configure exposure and security in production.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">Actuator</span>
-                        <span class="concept-tag">/health</span>
-                        <span class="concept-tag">/metrics</span>
-                    </div>
-                </div>
-
-                <div class="concept-card good" data-id="p7-2">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Health Endpoints</span>
-                    </div>
-                    <p class="concept-description">Custom health indicators for dependencies. Aggregate health status. Kubernetes liveness/readiness probes integration.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">HealthIndicator</span>
-                        <span class="concept-tag">Probes</span>
-                    </div>
-                </div>
-
-                <div class="concept-card good" data-id="p7-3">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Micrometer Metrics</span>
-                    </div>
-                    <p class="concept-description">"SLF4J for metrics" - vendor-neutral instrumentation. Ships to Prometheus, Datadog, New Relic without code changes. Counters, gauges, timers.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">Micrometer</span>
-                        <span class="concept-tag">Prometheus</span>
-                    </div>
-                </div>
-
-                <div class="concept-card good" data-id="p7-4">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Logging (SLF4J, Logback)</span>
-                    </div>
-                    <p class="concept-description">SLF4J as logging facade, Logback as implementation. Configure levels, appenders, patterns in logback-spring.xml. MDC for request tracing.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">SLF4J</span>
-                        <span class="concept-tag">Logback</span>
-                        <span class="concept-tag">MDC</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- P8 - Microservices -->
-        <section class="priority-section" data-priority="good">
-            <div class="priority-header">
-                <span class="priority-badge good">P8</span>
-                <span class="priority-title">Microservices</span>
-                <span class="priority-count" id="p8-count">0/4</span>
-            </div>
-            <div class="concepts-grid">
-                <div class="concept-card good" data-id="p8-1">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Modular Monolith vs Microservices</span>
-                    </div>
-                    <p class="concept-description">Start with modular monolith! Microservices add network complexity, distributed transactions, eventual consistency. Only decompose when necessary.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">Architecture</span>
-                        <span class="concept-tag">Modularity</span>
-                    </div>
-                </div>
-
-                <div class="concept-card good" data-id="p8-2">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Service Communication</span>
-                    </div>
-                    <p class="concept-description">Synchronous: OpenFeign (declarative), WebClient (reactive). Asynchronous: Kafka, RabbitMQ for event-driven architecture. RestTemplate is deprecated.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">OpenFeign</span>
-                        <span class="concept-tag">WebClient</span>
-                        <span class="concept-tag">Kafka</span>
-                    </div>
-                </div>
-
-                <div class="concept-card good" data-id="p8-3">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Docker and Containerization</span>
-                    </div>
-                    <p class="concept-description">Package Spring Boot JARs in Docker images. Use Buildpacks for Dockerfile-less builds. Docker Compose for multi-container local dev.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">Docker</span>
-                        <span class="concept-tag">Buildpacks</span>
-                        <span class="concept-tag">Compose</span>
-                    </div>
-                </div>
-
-                <div class="concept-card good" data-id="p8-4">
-                    <div class="concept-header">
-                        <label class="concept-checkbox">
-                            <input type="checkbox" onchange="updateProgress()">
-                            <span class="concept-checkmark"></span>
-                        </label>
-                        <span class="concept-title">Cloud Deployment Options</span>
-                    </div>
-                    <p class="concept-description">PaaS: Render, Railway, Heroku (simple). IaaS: AWS EC2, GCP (control). Free tiers: Oracle Cloud, Render free tier for student projects.</p>
-                    <div class="concept-tags">
-                        <span class="concept-tag">Render</span>
-                        <span class="concept-tag">Railway</span>
-                        <span class="concept-tag">AWS</span>
+                        <span class="concept-tag">psql</span>
+                        <span class="concept-tag">\dt</span>
+                        <span class="concept-tag">\d</span>
+                        <span class="concept-tag">\l</span>
                     </div>
                 </div>
             </div>
         </section>
 
         <footer>
-            <p>Built for learning Spring Boot | <a href="https://spring.io/guides" target="_blank">Spring Guides</a> | <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/" target="_blank">Documentation</a></p>
+            <p>Built for learning PostgreSQL | <a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL Docs</a> | <a href="https://www.postgresqltutorial.com/" target="_blank">PostgreSQL Tutorial</a></p>
         </footer>
     </div>
 
@@ -1406,7 +1286,7 @@
             checkboxes.forEach(checkbox => {
                 const card = checkbox.closest('.concept-card');
                 const id = card.dataset.id;
-                const saved = localStorage.getItem('springboot-concepts-' + id);
+                const saved = localStorage.getItem('postgresql-' + id);
                 if (saved === 'true') {
                     checkbox.checked = true;
                     card.classList.add('checked');
@@ -1417,7 +1297,7 @@
 
         // Save state to localStorage
         function saveState(id, checked) {
-            localStorage.setItem('springboot-concepts-' + id, checked);
+            localStorage.setItem('postgresql-' + id, checked);
         }
 
         // Filter concepts by priority
@@ -1475,7 +1355,7 @@
             document.getElementById('progress-bar').style.width = percent + '%';
 
             // Update priority section counts
-            const priorities = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'];
+            const priorities = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
             priorities.forEach(priority => {
                 const cards = document.querySelectorAll(`.concept-card[data-id^="${priority}-"]`);
                 const sectionTotal = cards.length;

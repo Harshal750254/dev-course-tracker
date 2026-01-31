@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring Boot Learning Plan | 6-Week Intensive</title>
+    <title>FastAPI Learning Plan | 6-Week Intensive</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,12 +15,13 @@
             --text-secondary: #8b949e;
             --text-muted: #6e7681;
             --border-color: #30363d;
-            --accent-green: #238636;
-            --accent-green-bright: #3fb950;
+            --accent-green: #009688;
+            --accent-green-bright: #26a69a;
             --accent-blue: #58a6ff;
             --accent-purple: #a371f7;
             --accent-orange: #f0883e;
             --accent-red: #f85149;
+            --accent-teal: #009688;
             --gradient-start: #0d1117;
             --gradient-end: #161b22;
         }
@@ -82,16 +83,17 @@
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.75rem;
             border-radius: 6px;
             transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -101,7 +103,7 @@
 
         .nav-links a.active {
             color: var(--accent-green-bright);
-            background: rgba(35, 134, 54, 0.15);
+            background: rgba(0, 150, 136, 0.15);
         }
 
         /* Header */
@@ -215,7 +217,7 @@
 
         .week-card:hover {
             border-color: var(--accent-green);
-            box-shadow: 0 0 20px rgba(35, 134, 54, 0.1);
+            box-shadow: 0 0 20px rgba(0, 150, 136, 0.1);
         }
 
         .week-header {
@@ -224,13 +226,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(90deg, rgba(35, 134, 54, 0.05), transparent);
+            background: linear-gradient(90deg, rgba(0, 150, 136, 0.05), transparent);
             border-bottom: 1px solid transparent;
             transition: all 0.2s ease;
         }
 
         .week-header:hover {
-            background: linear-gradient(90deg, rgba(35, 134, 54, 0.1), transparent);
+            background: linear-gradient(90deg, rgba(0, 150, 136, 0.1), transparent);
         }
 
         .week-card.open .week-header {
@@ -248,7 +250,7 @@
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--accent-green-bright);
-            background: rgba(35, 134, 54, 0.15);
+            background: rgba(0, 150, 136, 0.15);
             padding: 0.25rem 0.75rem;
             border-radius: 4px;
         }
@@ -291,7 +293,7 @@
         }
 
         .week-card.open .week-content {
-            max-height: 1000px;
+            max-height: 2000px;
         }
 
         .week-inner {
@@ -433,8 +435,8 @@
             font-size: 0.7rem;
             padding: 0.15rem 0.5rem;
             border-radius: 3px;
-            background: rgba(88, 166, 255, 0.1);
-            color: var(--accent-blue);
+            background: rgba(0, 150, 136, 0.1);
+            color: var(--accent-green-bright);
         }
 
         /* Footer */
@@ -462,6 +464,19 @@
 
             .nav-content {
                 padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
             }
 
             .progress-stats {
@@ -484,11 +499,12 @@
 <body>
     <nav>
         <div class="nav-content">
-            <a href="index.html" class="logo">SpringBoot_Plan</a>
+            <a href="index.html" class="logo">FastAPI_Plan</a>
             <div class="nav-links">
                 <a href="index.html" class="active">Weekly Schedule</a>
-                <a href="concepts.html">Spring Concepts</a>
-                <a href="java-core.html">Java Core</a>
+                <a href="concepts.html">FastAPI Concepts</a>
+                <a href="python-core.html">Python Core</a>
+                <a href="postgresql.html">PostgreSQL</a>
             </div>
         </div>
     </nav>
@@ -496,7 +512,7 @@
     <div class="container">
         <header>
             <h1>6-Week Intensive Learning</h1>
-            <p>Master Spring Boot from Foundation to Production</p>
+            <p>Master FastAPI from Foundation to Production</p>
         </header>
 
         <section class="progress-section">
@@ -508,7 +524,7 @@
                         <div class="stat-label">Completed</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value" id="total-count">37</div>
+                        <div class="stat-value" id="total-count">42</div>
                         <div class="stat-label">Total</div>
                     </div>
                     <div class="stat">
@@ -527,10 +543,10 @@
             <div class="week-header" onclick="toggleWeek(1)">
                 <div class="week-title">
                     <span class="week-number">WEEK 1</span>
-                    <span class="week-theme">Foundation & IoC</span>
+                    <span class="week-theme">Python Foundations</span>
                 </div>
                 <div class="week-meta">
-                    <span class="week-progress" id="week1-progress">0/8</span>
+                    <span class="week-progress" id="week1-progress">0/7</span>
                     <span class="expand-icon">▼</span>
                 </div>
             </div>
@@ -538,8 +554,8 @@
                 <div class="week-inner">
                     <div class="week-goals">
                         <h4>Key Goals</h4>
-                        <p>Java 17 constructs, Maven builds, Bean Lifecycle, DI patterns (Constructor vs Setter)</p>
-                        <span class="output-badge">📦 Output: Console ToDo CLI App</span>
+                        <p>Python 3.11+ features, type hints, virtual environments, package management with pip/poetry</p>
+                        <span class="output-badge">📦 Output: CLI Todo App</span>
                     </div>
                     <ul class="checklist" id="week1-checklist">
                         <li class="checklist-item" data-id="w1-1">
@@ -548,10 +564,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Install JDK 17+ and configure IDE (IntelliJ IDEA recommended)</div>
+                                <div class="item-title">Install Python 3.11+ and configure IDE (VS Code or PyCharm recommended)</div>
                                 <div class="item-tags">
                                     <span class="tag">setup</span>
-                                    <span class="tag">JDK 17</span>
+                                    <span class="tag">Python 3.11+</span>
                                 </div>
                             </div>
                         </li>
@@ -561,10 +577,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Master OOP fundamentals: Classes, Inheritance, Interfaces, Polymorphism</div>
+                                <div class="item-title">Master Python basics: variables, data types, control flow, functions</div>
                                 <div class="item-tags">
-                                    <span class="tag">Java Core</span>
-                                    <span class="tag">OOP</span>
+                                    <span class="tag">Python Core</span>
+                                    <span class="tag">Basics</span>
                                 </div>
                             </div>
                         </li>
@@ -574,9 +590,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Learn Collections framework: ArrayList, HashMap, HashSet</div>
+                                <div class="item-title">Learn OOP fundamentals: classes, inheritance, composition, dataclasses</div>
                                 <div class="item-tags">
-                                    <span class="tag">Collections</span>
+                                    <span class="tag">OOP</span>
+                                    <span class="tag">@dataclass</span>
                                 </div>
                             </div>
                         </li>
@@ -586,11 +603,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand Java Records, Sealed Classes, and Functional Interfaces</div>
+                                <div class="item-title">Understand type hints and the typing module (List, Dict, Optional, Union)</div>
                                 <div class="item-tags">
-                                    <span class="tag">Java 17+</span>
-                                    <span class="tag">Records</span>
-                                    <span class="tag">Lambdas</span>
+                                    <span class="tag">Type Hints</span>
+                                    <span class="tag">typing</span>
                                 </div>
                             </div>
                         </li>
@@ -600,10 +616,11 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Set up Maven project: understand pom.xml, dependencies, and build lifecycle</div>
+                                <div class="item-title">Set up virtual environments (venv) and understand pip/poetry for dependencies</div>
                                 <div class="item-tags">
-                                    <span class="tag">Maven</span>
-                                    <span class="tag">Build Tools</span>
+                                    <span class="tag">venv</span>
+                                    <span class="tag">pip</span>
+                                    <span class="tag">poetry</span>
                                 </div>
                             </div>
                         </li>
@@ -626,24 +643,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand IoC and Dependency Injection concepts</div>
+                                <div class="item-title">Build a CLI Todo application using classes and file I/O</div>
                                 <div class="item-tags">
-                                    <span class="tag">Spring Core</span>
-                                    <span class="tag">IoC</span>
-                                    <span class="tag">DI</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="checklist-item" data-id="w1-8">
-                            <label class="checkbox-wrapper">
-                                <input type="checkbox" onchange="updateProgress()">
-                                <span class="checkmark"></span>
-                            </label>
-                            <div class="item-content">
-                                <div class="item-title">Learn Bean Lifecycle and scopes (Singleton, Prototype)</div>
-                                <div class="item-tags">
-                                    <span class="tag">Beans</span>
-                                    <span class="tag">Scopes</span>
+                                    <span class="tag">Project</span>
+                                    <span class="tag">CLI</span>
                                 </div>
                             </div>
                         </li>
@@ -668,7 +671,7 @@
                 <div class="week-inner">
                     <div class="week-goals">
                         <h4>Key Goals</h4>
-                        <p>MVC Architecture, DispatcherServlet flow, DTO mapping, Exception Handling, Validation</p>
+                        <p>FastAPI basics, Pydantic models, path/query parameters, async/await, request validation</p>
                         <span class="output-badge">📦 Output: Task Manager API (in-memory storage)</span>
                     </div>
                     <ul class="checklist" id="week2-checklist">
@@ -678,10 +681,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Create first Spring Boot app using Spring Initializr (start.spring.io)</div>
+                                <div class="item-title">Create first FastAPI app with uvicorn server</div>
                                 <div class="item-tags">
-                                    <span class="tag">Spring Boot</span>
-                                    <span class="tag">Initializr</span>
+                                    <span class="tag">FastAPI</span>
+                                    <span class="tag">uvicorn</span>
                                 </div>
                             </div>
                         </li>
@@ -691,11 +694,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand @RestController vs @Controller, request mapping annotations</div>
+                                <div class="item-title">Understand path operations: @app.get, @app.post, @app.put, @app.delete</div>
                                 <div class="item-tags">
-                                    <span class="tag">Controllers</span>
-                                    <span class="tag">@GetMapping</span>
-                                    <span class="tag">@PostMapping</span>
+                                    <span class="tag">Decorators</span>
+                                    <span class="tag">HTTP Methods</span>
                                 </div>
                             </div>
                         </li>
@@ -705,10 +707,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Implement DTOs and understand Entity vs DTO separation</div>
+                                <div class="item-title">Create Pydantic models for request/response validation</div>
                                 <div class="item-tags">
-                                    <span class="tag">DTOs</span>
-                                    <span class="tag">Data Transfer</span>
+                                    <span class="tag">Pydantic</span>
+                                    <span class="tag">BaseModel</span>
                                 </div>
                             </div>
                         </li>
@@ -718,10 +720,11 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Add input validation with @Valid, @NotNull, @Size annotations</div>
+                                <div class="item-title">Work with Path, Query, and Body parameters</div>
                                 <div class="item-tags">
-                                    <span class="tag">Validation</span>
-                                    <span class="tag">Bean Validation</span>
+                                    <span class="tag">Path</span>
+                                    <span class="tag">Query</span>
+                                    <span class="tag">Body</span>
                                 </div>
                             </div>
                         </li>
@@ -731,10 +734,11 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Implement global exception handling with @ControllerAdvice</div>
+                                <div class="item-title">Understand async/await and when to use async endpoints</div>
                                 <div class="item-tags">
-                                    <span class="tag">@ExceptionHandler</span>
-                                    <span class="tag">Error Handling</span>
+                                    <span class="tag">async</span>
+                                    <span class="tag">await</span>
+                                    <span class="tag">ASGI</span>
                                 </div>
                             </div>
                         </li>
@@ -744,10 +748,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand JSON serialization with Jackson, configure ObjectMapper</div>
+                                <div class="item-title">Implement error handling with HTTPException and custom exception handlers</div>
                                 <div class="item-tags">
-                                    <span class="tag">Jackson</span>
-                                    <span class="tag">JSON</span>
+                                    <span class="tag">HTTPException</span>
+                                    <span class="tag">Error Handling</span>
                                 </div>
                             </div>
                         </li>
@@ -757,10 +761,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Master HTTP methods semantics: GET, POST, PUT, PATCH, DELETE</div>
+                                <div class="item-title">Explore automatic OpenAPI/Swagger documentation at /docs</div>
                                 <div class="item-tags">
-                                    <span class="tag">REST</span>
-                                    <span class="tag">HTTP Methods</span>
+                                    <span class="tag">OpenAPI</span>
+                                    <span class="tag">Swagger</span>
                                 </div>
                             </div>
                         </li>
@@ -777,7 +781,7 @@
                     <span class="week-theme">Persistence</span>
                 </div>
                 <div class="week-meta">
-                    <span class="week-progress" id="week3-progress">0/6</span>
+                    <span class="week-progress" id="week3-progress">0/7</span>
                     <span class="expand-icon">▼</span>
                 </div>
             </div>
@@ -785,7 +789,7 @@
                 <div class="week-inner">
                     <div class="week-goals">
                         <h4>Key Goals</h4>
-                        <p>JPA Entities, Repositories, Relationships (One-to-Many), Transaction boundaries</p>
+                        <p>SQLAlchemy 2.0, async database drivers, Alembic migrations, repository pattern</p>
                         <span class="output-badge">📦 Output: Task Manager connected to PostgreSQL</span>
                     </div>
                     <ul class="checklist" id="week3-checklist">
@@ -795,11 +799,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Set up PostgreSQL/H2 database and configure datasource</div>
+                                <div class="item-title">Set up PostgreSQL database (local or Docker container)</div>
                                 <div class="item-tags">
-                                    <span class="tag">Database</span>
                                     <span class="tag">PostgreSQL</span>
-                                    <span class="tag">H2</span>
+                                    <span class="tag">Docker</span>
                                 </div>
                             </div>
                         </li>
@@ -809,10 +812,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Create JPA Entities with @Entity, @Id, @GeneratedValue</div>
+                                <div class="item-title">Configure SQLAlchemy 2.0 with async support (asyncpg driver)</div>
                                 <div class="item-tags">
-                                    <span class="tag">JPA</span>
-                                    <span class="tag">Entities</span>
+                                    <span class="tag">SQLAlchemy</span>
+                                    <span class="tag">asyncpg</span>
                                 </div>
                             </div>
                         </li>
@@ -822,10 +825,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Implement entity relationships: @OneToMany, @ManyToOne, @ManyToMany</div>
+                                <div class="item-title">Create SQLAlchemy models with relationships (One-to-Many, Many-to-Many)</div>
                                 <div class="item-tags">
+                                    <span class="tag">Models</span>
                                     <span class="tag">Relationships</span>
-                                    <span class="tag">Mappings</span>
                                 </div>
                             </div>
                         </li>
@@ -835,10 +838,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Use Spring Data JPA repositories and derived query methods</div>
+                                <div class="item-title">Implement async CRUD operations with session management</div>
                                 <div class="item-tags">
-                                    <span class="tag">Repository</span>
                                     <span class="tag">CRUD</span>
+                                    <span class="tag">AsyncSession</span>
                                 </div>
                             </div>
                         </li>
@@ -848,10 +851,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand @Transactional and transaction propagation</div>
+                                <div class="item-title">Set up Alembic for database migrations</div>
                                 <div class="item-tags">
-                                    <span class="tag">Transactions</span>
-                                    <span class="tag">ACID</span>
+                                    <span class="tag">Alembic</span>
+                                    <span class="tag">Migrations</span>
                                 </div>
                             </div>
                         </li>
@@ -861,10 +864,23 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Set up database migrations with Flyway</div>
+                                <div class="item-title">Use FastAPI dependency injection for database sessions</div>
                                 <div class="item-tags">
-                                    <span class="tag">Flyway</span>
-                                    <span class="tag">Migrations</span>
+                                    <span class="tag">Depends</span>
+                                    <span class="tag">DI</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w3-7">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement repository pattern for clean data access layer</div>
+                                <div class="item-tags">
+                                    <span class="tag">Repository</span>
+                                    <span class="tag">Clean Architecture</span>
                                 </div>
                             </div>
                         </li>
@@ -881,7 +897,7 @@
                     <span class="week-theme">Security</span>
                 </div>
                 <div class="week-meta">
-                    <span class="week-progress" id="week4-progress">0/6</span>
+                    <span class="week-progress" id="week4-progress">0/7</span>
                     <span class="expand-icon">▼</span>
                 </div>
             </div>
@@ -889,8 +905,8 @@
                 <div class="week-inner">
                     <div class="week-goals">
                         <h4>Key Goals</h4>
-                        <p>Authentication flow, Filter Chain, JWT generation/validation, Password Encoding (BCrypt)</p>
-                        <span class="output-badge">📦 Output: Secured API with user auth</span>
+                        <p>OAuth2 with Password flow, JWT tokens, password hashing with bcrypt, security dependencies</p>
+                        <span class="output-badge">📦 Output: Secured API with user authentication</span>
                     </div>
                     <ul class="checklist" id="week4-checklist">
                         <li class="checklist-item" data-id="w4-1">
@@ -899,10 +915,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Add Spring Security dependency and understand filter chain</div>
+                                <div class="item-title">Understand OAuth2 concepts and the Password flow</div>
                                 <div class="item-tags">
-                                    <span class="tag">Spring Security</span>
-                                    <span class="tag">Filters</span>
+                                    <span class="tag">OAuth2</span>
+                                    <span class="tag">Password Flow</span>
                                 </div>
                             </div>
                         </li>
@@ -912,10 +928,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand Authentication vs Authorization concepts</div>
+                                <div class="item-title">Implement password hashing with passlib and bcrypt</div>
                                 <div class="item-tags">
-                                    <span class="tag">AuthN</span>
-                                    <span class="tag">AuthZ</span>
+                                    <span class="tag">passlib</span>
+                                    <span class="tag">bcrypt</span>
                                 </div>
                             </div>
                         </li>
@@ -925,9 +941,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Implement UserDetailsService for custom user loading</div>
+                                <div class="item-title">Create JWT token generation and validation with python-jose</div>
                                 <div class="item-tags">
-                                    <span class="tag">UserDetailsService</span>
+                                    <span class="tag">JWT</span>
+                                    <span class="tag">python-jose</span>
                                 </div>
                             </div>
                         </li>
@@ -937,10 +954,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Implement JWT token generation and validation</div>
+                                <div class="item-title">Build login endpoint with OAuth2PasswordRequestForm</div>
                                 <div class="item-tags">
-                                    <span class="tag">JWT</span>
-                                    <span class="tag">Tokens</span>
+                                    <span class="tag">Login</span>
+                                    <span class="tag">OAuth2PasswordRequestForm</span>
                                 </div>
                             </div>
                         </li>
@@ -950,10 +967,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Configure role-based authorization with @PreAuthorize</div>
+                                <div class="item-title">Create security dependencies for protected routes (get_current_user)</div>
                                 <div class="item-tags">
-                                    <span class="tag">Roles</span>
-                                    <span class="tag">@PreAuthorize</span>
+                                    <span class="tag">Depends</span>
+                                    <span class="tag">Security</span>
                                 </div>
                             </div>
                         </li>
@@ -963,10 +980,23 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Use BCrypt for password encoding</div>
+                                <div class="item-title">Implement role-based access control (RBAC)</div>
                                 <div class="item-tags">
-                                    <span class="tag">BCrypt</span>
-                                    <span class="tag">Password Encoding</span>
+                                    <span class="tag">RBAC</span>
+                                    <span class="tag">Permissions</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w4-7">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Add refresh token mechanism for better security</div>
+                                <div class="item-tags">
+                                    <span class="tag">Refresh Token</span>
+                                    <span class="tag">Token Rotation</span>
                                 </div>
                             </div>
                         </li>
@@ -983,7 +1013,7 @@
                     <span class="week-theme">Testing & Quality</span>
                 </div>
                 <div class="week-meta">
-                    <span class="week-progress" id="week5-progress">0/5</span>
+                    <span class="week-progress" id="week5-progress">0/7</span>
                     <span class="expand-icon">▼</span>
                 </div>
             </div>
@@ -991,8 +1021,8 @@
                 <div class="week-inner">
                     <div class="week-goals">
                         <h4>Key Goals</h4>
-                        <p>Unit Testing (Mockito), Slice Testing (@WebMvcTest), Integration Testing (Testcontainers)</p>
-                        <span class="output-badge">📦 Output: 80% test coverage + Swagger docs</span>
+                        <p>pytest, httpx/TestClient, pytest-asyncio, test coverage, API documentation</p>
+                        <span class="output-badge">📦 Output: 80% test coverage + OpenAPI docs</span>
                     </div>
                     <ul class="checklist" id="week5-checklist">
                         <li class="checklist-item" data-id="w5-1">
@@ -1001,10 +1031,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Write unit tests with JUnit 5 and understand test lifecycle</div>
+                                <div class="item-title">Set up pytest and understand test discovery and fixtures</div>
                                 <div class="item-tags">
-                                    <span class="tag">JUnit 5</span>
-                                    <span class="tag">Unit Tests</span>
+                                    <span class="tag">pytest</span>
+                                    <span class="tag">fixtures</span>
                                 </div>
                             </div>
                         </li>
@@ -1014,9 +1044,9 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Use Mockito for mocking: @Mock, @InjectMocks, when/thenReturn</div>
+                                <div class="item-title">Write unit tests for services and utility functions</div>
                                 <div class="item-tags">
-                                    <span class="tag">Mockito</span>
+                                    <span class="tag">Unit Tests</span>
                                     <span class="tag">Mocking</span>
                                 </div>
                             </div>
@@ -1027,10 +1057,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Implement slice tests: @WebMvcTest, @DataJpaTest</div>
+                                <div class="item-title">Test FastAPI endpoints with TestClient (httpx)</div>
                                 <div class="item-tags">
-                                    <span class="tag">Slice Tests</span>
-                                    <span class="tag">MockMvc</span>
+                                    <span class="tag">TestClient</span>
+                                    <span class="tag">httpx</span>
                                 </div>
                             </div>
                         </li>
@@ -1040,10 +1070,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Set up integration tests with @SpringBootTest and Testcontainers</div>
+                                <div class="item-title">Use pytest-asyncio for testing async code</div>
                                 <div class="item-tags">
-                                    <span class="tag">Integration Tests</span>
-                                    <span class="tag">Testcontainers</span>
+                                    <span class="tag">pytest-asyncio</span>
+                                    <span class="tag">async tests</span>
                                 </div>
                             </div>
                         </li>
@@ -1053,10 +1083,36 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Add API documentation with SpringDoc OpenAPI (Swagger)</div>
+                                <div class="item-title">Set up test database with fixtures (factory pattern)</div>
                                 <div class="item-tags">
-                                    <span class="tag">Swagger</span>
+                                    <span class="tag">Test DB</span>
+                                    <span class="tag">Factory</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w5-6">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Measure and improve code coverage with pytest-cov</div>
+                                <div class="item-tags">
+                                    <span class="tag">pytest-cov</span>
+                                    <span class="tag">Coverage</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w5-7">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Customize OpenAPI documentation with tags and descriptions</div>
+                                <div class="item-tags">
                                     <span class="tag">OpenAPI</span>
+                                    <span class="tag">Documentation</span>
                                 </div>
                             </div>
                         </li>
@@ -1070,10 +1126,10 @@
             <div class="week-header" onclick="toggleWeek(6)">
                 <div class="week-title">
                     <span class="week-number">WEEK 6</span>
-                    <span class="week-theme">Ops & Microservices</span>
+                    <span class="week-theme">Ops & Deployment</span>
                 </div>
                 <div class="week-meta">
-                    <span class="week-progress" id="week6-progress">0/5</span>
+                    <span class="week-progress" id="week6-progress">0/7</span>
                     <span class="expand-icon">▼</span>
                 </div>
             </div>
@@ -1081,8 +1137,8 @@
                 <div class="week-inner">
                     <div class="week-goals">
                         <h4>Key Goals</h4>
-                        <p>Dockerization, Docker Compose, Actuator, Basic Service Decomposition</p>
-                        <span class="output-badge">📦 Output: Deployed microservices via docker-compose</span>
+                        <p>Docker, docker-compose, uvicorn/gunicorn configuration, cloud deployment</p>
+                        <span class="output-badge">📦 Output: Deployed FastAPI service</span>
                     </div>
                     <ul class="checklist" id="week6-checklist">
                         <li class="checklist-item" data-id="w6-1">
@@ -1091,10 +1147,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Create Dockerfile and containerize Spring Boot application</div>
+                                <div class="item-title">Create Dockerfile for FastAPI application</div>
                                 <div class="item-tags">
                                     <span class="tag">Docker</span>
-                                    <span class="tag">Containerization</span>
+                                    <span class="tag">Dockerfile</span>
                                 </div>
                             </div>
                         </li>
@@ -1104,9 +1160,9 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Set up docker-compose with app and database services</div>
+                                <div class="item-title">Set up docker-compose with app, database, and optional services</div>
                                 <div class="item-tags">
-                                    <span class="tag">Docker Compose</span>
+                                    <span class="tag">docker-compose</span>
                                     <span class="tag">Multi-container</span>
                                 </div>
                             </div>
@@ -1117,10 +1173,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Enable Spring Boot Actuator for health and metrics endpoints</div>
+                                <div class="item-title">Configure uvicorn with gunicorn for production (workers, timeouts)</div>
                                 <div class="item-tags">
-                                    <span class="tag">Actuator</span>
-                                    <span class="tag">Monitoring</span>
+                                    <span class="tag">uvicorn</span>
+                                    <span class="tag">gunicorn</span>
                                 </div>
                             </div>
                         </li>
@@ -1130,10 +1186,10 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Deploy application to cloud platform (Render/Railway/Heroku)</div>
+                                <div class="item-title">Implement health check endpoints for container orchestration</div>
                                 <div class="item-tags">
-                                    <span class="tag">Deployment</span>
-                                    <span class="tag">Cloud</span>
+                                    <span class="tag">Health Check</span>
+                                    <span class="tag">Monitoring</span>
                                 </div>
                             </div>
                         </li>
@@ -1143,10 +1199,36 @@
                                 <span class="checkmark"></span>
                             </label>
                             <div class="item-content">
-                                <div class="item-title">Understand microservices patterns: service decomposition, communication</div>
+                                <div class="item-title">Configure environment variables with Pydantic BaseSettings</div>
                                 <div class="item-tags">
-                                    <span class="tag">Microservices</span>
-                                    <span class="tag">Architecture</span>
+                                    <span class="tag">BaseSettings</span>
+                                    <span class="tag">12-Factor</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w6-6">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Deploy to cloud platform (Render, Railway, or Fly.io)</div>
+                                <div class="item-tags">
+                                    <span class="tag">Deployment</span>
+                                    <span class="tag">Cloud</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w6-7">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Set up basic logging and monitoring (structlog, Prometheus basics)</div>
+                                <div class="item-tags">
+                                    <span class="tag">Logging</span>
+                                    <span class="tag">structlog</span>
                                 </div>
                             </div>
                         </li>
@@ -1156,7 +1238,7 @@
         </div>
 
         <footer>
-            <p>Built for learning Spring Boot | <a href="https://spring.io/guides" target="_blank">Spring Guides</a> | <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/" target="_blank">Documentation</a></p>
+            <p>Built for learning FastAPI | <a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI Docs</a> | <a href="https://docs.python.org/3/" target="_blank">Python Docs</a> | <a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL Docs</a></p>
         </footer>
     </div>
 
@@ -1167,7 +1249,7 @@
             checkboxes.forEach(checkbox => {
                 const item = checkbox.closest('.checklist-item');
                 const id = item.dataset.id;
-                const saved = localStorage.getItem('springboot-checklist-' + id);
+                const saved = localStorage.getItem('fastapi-checklist-' + id);
                 if (saved === 'true') {
                     checkbox.checked = true;
                     item.classList.add('checked');
@@ -1178,7 +1260,7 @@
 
         // Save state to localStorage
         function saveState(id, checked) {
-            localStorage.setItem('springboot-checklist-' + id, checked);
+            localStorage.setItem('fastapi-checklist-' + id, checked);
         }
 
         // Toggle week card

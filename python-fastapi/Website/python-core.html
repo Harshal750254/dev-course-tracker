@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Core Concepts | Programming Fundamentals</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #262c36;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-green: #009688;
+            --accent-green-bright: #26a69a;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --accent-cyan: #39c5cf;
+            --gradient-start: #0d1117;
+            --gradient-end: #161b22;
+            --critical-bg: rgba(248, 81, 73, 0.1);
+            --critical-border: rgba(248, 81, 73, 0.3);
+            --backend-bg: rgba(163, 113, 247, 0.1);
+            --backend-border: rgba(163, 113, 247, 0.3);
+            --important-bg: rgba(240, 136, 62, 0.1);
+            --important-border: rgba(240, 136, 62, 0.3);
+            --good-bg: rgba(88, 166, 255, 0.1);
+            --good-border: rgba(88, 166, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-green-bright);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: ">";
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-orange);
+            background: rgba(240, 136, 62, 0.15);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.critical { background: var(--accent-red); }
+        .legend-color.backend { background: var(--accent-purple); }
+        .legend-color.important { background: var(--accent-orange); }
+        .legend-color.good { background: var(--accent-blue); }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.6rem 1.1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-orange);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            color: white;
+        }
+
+        .filter-btn.critical.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        .filter-btn.backend.active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .filter-btn.important.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
+
+        .filter-btn.good.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Priority Sections */
+        .priority-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .priority-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .priority-badge.critical {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border: 1px solid var(--critical-border);
+        }
+
+        .priority-badge.backend {
+            background: var(--backend-bg);
+            color: var(--accent-purple);
+            border: 1px solid var(--backend-border);
+        }
+
+        .priority-badge.important {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border: 1px solid var(--important-border);
+        }
+
+        .priority-badge.good {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border: 1px solid var(--good-border);
+        }
+
+        .priority-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .priority-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Concept Cards Grid */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+        }
+
+        .concept-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .concept-card.critical::before { background: var(--accent-red); }
+        .concept-card.backend::before { background: var(--accent-purple); }
+        .concept-card.important::before { background: var(--accent-orange); }
+        .concept-card.good::before { background: var(--accent-blue); }
+
+        .concept-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .concept-card.checked {
+            opacity: 0.6;
+        }
+
+        .concept-card.checked::after {
+            content: '✓ Learned';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-green-bright);
+            background: rgba(0, 150, 136, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .concept-checkbox {
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+
+        .concept-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 18px;
+            width: 18px;
+        }
+
+        .concept-checkmark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox:hover .concept-checkmark {
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkmark::after {
+            content: "✓";
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .concept-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .concept-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .concept-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .concept-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-card.critical .concept-tag {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border-color: var(--critical-border);
+        }
+
+        .concept-card.backend .concept-tag {
+            background: var(--backend-bg);
+            color: var(--accent-purple);
+            border-color: var(--backend-border);
+        }
+
+        .concept-card.important .concept-tag {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border-color: var(--important-border);
+        }
+
+        .concept-card.good .concept-tag {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border-color: var(--good-border);
+        }
+
+        /* Hidden cards when filtered */
+        .concept-card.hidden {
+            display: none;
+        }
+
+        .priority-section.hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .nav-content {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                gap: 1rem;
+            }
+
+            .filter-section {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .legend {
+                gap: 0.75rem;
+            }
+
+            .legend-item {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">FastAPI_Plan</a>
+            <div class="nav-links">
+                <a href="index.html">Weekly Schedule</a>
+                <a href="concepts.html">FastAPI Concepts</a>
+                <a href="python-core.html" class="active">Python Core</a>
+                <a href="postgresql.html">PostgreSQL</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Python Core Concepts</h1>
+            <p>Programming Fundamentals for Backend Development</p>
+        </header>
+
+        <section class="progress-section">
+            <div class="progress-header">
+                <h2>Python Concepts Mastered</h2>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="completed-count">0</div>
+                        <div class="stat-label">Learned</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="total-count">28</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="percent-complete">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color critical"></span>
+                <span>Critical - Must Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color backend"></span>
+                <span>Backend Essential</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color important"></span>
+                <span>Important - Should Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color good"></span>
+                <span>Good to Know</span>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all" onclick="filterConcepts('all')">All Concepts</button>
+            <button class="filter-btn critical" data-filter="critical" onclick="filterConcepts('critical')">Critical</button>
+            <button class="filter-btn backend" data-filter="backend" onclick="filterConcepts('backend')">Backend Essential</button>
+            <button class="filter-btn important" data-filter="important" onclick="filterConcepts('important')">Important</button>
+            <button class="filter-btn good" data-filter="good" onclick="filterConcepts('good')">Good to Know</button>
+        </div>
+
+        <!-- Critical - OOP Fundamentals -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">Critical</span>
+                <span class="priority-title">OOP Fundamentals</span>
+                <span class="priority-count" id="oop-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="oop-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Classes, Inheritance, Composition</span>
+                    </div>
+                    <p class="concept-description">Classes define object blueprints. Inheritance (class Child(Parent)) for IS-A relationships. Composition (HAS-A) is often preferred for flexibility and loose coupling.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">class</span>
+                        <span class="concept-tag">super()</span>
+                        <span class="concept-tag">__init__</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="oop-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Dataclasses (@dataclass)</span>
+                    </div>
+                    <p class="concept-description">Decorator that auto-generates __init__, __repr__, __eq__. Reduces boilerplate for data-holding classes. Use frozen=True for immutability. Perfect for DTOs and configs.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@dataclass</span>
+                        <span class="concept-tag">field()</span>
+                        <span class="concept-tag">frozen</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="oop-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Abstract Base Classes (ABC)</span>
+                    </div>
+                    <p class="concept-description">Define interfaces with abc module. @abstractmethod enforces implementation in subclasses. Use for dependency inversion and testable architecture.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">ABC</span>
+                        <span class="concept-tag">@abstractmethod</span>
+                        <span class="concept-tag">Interface</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="oop-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Magic/Dunder Methods</span>
+                    </div>
+                    <p class="concept-description">Special methods like __str__, __repr__, __eq__, __hash__. Enable operator overloading and built-in function integration. __enter__/__exit__ for context managers.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">__str__</span>
+                        <span class="concept-tag">__repr__</span>
+                        <span class="concept-tag">__eq__</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Critical - Modern Python -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">Critical</span>
+                <span class="priority-title">Modern Python</span>
+                <span class="priority-count" id="modern-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="modern-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Type Hints and typing Module</span>
+                    </div>
+                    <p class="concept-description">Static type annotations for better IDE support and documentation. List[str], Dict[str, int], Optional[T], Union[A, B]. Essential for FastAPI and Pydantic.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">typing</span>
+                        <span class="concept-tag">Optional</span>
+                        <span class="concept-tag">Union</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="modern-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">F-strings and String Formatting</span>
+                    </div>
+                    <p class="concept-description">f"Hello {name}" for readable string interpolation. Support expressions: f"{price:.2f}". Debug with f"{var=}". Preferred over .format() and % formatting.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">f-string</span>
+                        <span class="concept-tag">Format Spec</span>
+                        <span class="concept-tag">=</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="modern-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Context Managers (with)</span>
+                    </div>
+                    <p class="concept-description">Automatic resource management with with statement. Ensures cleanup even on exceptions. Use for files, database connections, locks. Create with @contextmanager or __enter__/__exit__.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">with</span>
+                        <span class="concept-tag">@contextmanager</span>
+                        <span class="concept-tag">Resource</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="modern-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Walrus Operator (:=)</span>
+                    </div>
+                    <p class="concept-description">Assignment expression: if (n := len(data)) > 10. Assigns and returns value in one expression. Useful in while loops and comprehensions. Python 3.8+.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">:=</span>
+                        <span class="concept-tag">Python 3.8+</span>
+                        <span class="concept-tag">Assignment</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backend Essential - Data Structures -->
+        <section class="priority-section" data-priority="backend">
+            <div class="priority-header">
+                <span class="priority-badge backend">Backend Essential</span>
+                <span class="priority-title">Data Structures</span>
+                <span class="priority-count" id="data-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card backend" data-id="data-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Lists, Dicts, Sets, Tuples</span>
+                    </div>
+                    <p class="concept-description">List: ordered, mutable [1, 2, 3]. Dict: key-value O(1) lookup {"a": 1}. Set: unique elements {1, 2}. Tuple: immutable (1, 2). Choose based on mutability and lookup needs.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">list</span>
+                        <span class="concept-tag">dict</span>
+                        <span class="concept-tag">set</span>
+                        <span class="concept-tag">tuple</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="data-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">List/Dict Comprehensions</span>
+                    </div>
+                    <p class="concept-description">Concise syntax: [x*2 for x in range(10) if x > 5]. Dict: {k: v for k, v in items}. Set: {x for x in data}. More readable than map/filter for simple cases.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">[expr for x in iter]</span>
+                        <span class="concept-tag">{k: v}</span>
+                        <span class="concept-tag">Filtering</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="data-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Collections Module</span>
+                    </div>
+                    <p class="concept-description">defaultdict: dict with default factory. Counter: count hashable objects. deque: efficient append/pop from both ends. OrderedDict: maintains insertion order (less needed in 3.7+).</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">defaultdict</span>
+                        <span class="concept-tag">Counter</span>
+                        <span class="concept-tag">deque</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="data-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Named Tuples</span>
+                    </div>
+                    <p class="concept-description">Tuples with named fields. from collections import namedtuple or typing.NamedTuple. Lightweight alternative to classes. Immutable and memory efficient.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">namedtuple</span>
+                        <span class="concept-tag">NamedTuple</span>
+                        <span class="concept-tag">Immutable</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backend Essential - Async Programming -->
+        <section class="priority-section" data-priority="backend">
+            <div class="priority-header">
+                <span class="priority-badge backend">Backend Essential</span>
+                <span class="priority-title">Async Programming</span>
+                <span class="priority-count" id="async-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card backend" data-id="async-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">async/await Syntax</span>
+                    </div>
+                    <p class="concept-description">async def defines coroutine. await suspends until result ready. Only await inside async functions. Enables concurrent I/O without threads.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">async def</span>
+                        <span class="concept-tag">await</span>
+                        <span class="concept-tag">Coroutine</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="async-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">asyncio Basics</span>
+                    </div>
+                    <p class="concept-description">asyncio.run() starts event loop. asyncio.gather() runs multiple coroutines concurrently. asyncio.create_task() schedules coroutine. asyncio.sleep() for non-blocking delays.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">asyncio.run</span>
+                        <span class="concept-tag">gather</span>
+                        <span class="concept-tag">create_task</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="async-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Coroutines and Tasks</span>
+                    </div>
+                    <p class="concept-description">Coroutine: async function that can be paused. Task: scheduled coroutine running in event loop. await coroutine vs create_task() for concurrent execution.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Coroutine</span>
+                        <span class="concept-tag">Task</span>
+                        <span class="concept-tag">Concurrent</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="async-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Event Loops</span>
+                    </div>
+                    <p class="concept-description">Core of asyncio - schedules and runs coroutines. Single-threaded concurrency via cooperative multitasking. asyncio.get_event_loop() or asyncio.run() manages it.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Event Loop</span>
+                        <span class="concept-tag">Single Thread</span>
+                        <span class="concept-tag">Scheduling</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Important - Functional Programming -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">Important</span>
+                <span class="priority-title">Functional Programming</span>
+                <span class="priority-count" id="func-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="func-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Lambda Expressions</span>
+                    </div>
+                    <p class="concept-description">Anonymous functions: lambda x: x * 2. Single expression only. Use for simple callbacks, sorting keys, map/filter. Prefer named functions for complex logic.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">lambda</span>
+                        <span class="concept-tag">Anonymous</span>
+                        <span class="concept-tag">key=</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="func-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">map, filter, reduce</span>
+                    </div>
+                    <p class="concept-description">map(func, iterable) applies function to each element. filter(func, iterable) keeps truthy results. reduce() from functools for accumulation. Often replaced by comprehensions.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">map</span>
+                        <span class="concept-tag">filter</span>
+                        <span class="concept-tag">functools.reduce</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="func-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Generators and Iterators</span>
+                    </div>
+                    <p class="concept-description">yield creates generator - lazy evaluation, memory efficient. Generator expressions: (x for x in range(10)). __iter__ and __next__ for custom iterators.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">yield</span>
+                        <span class="concept-tag">Generator</span>
+                        <span class="concept-tag">Lazy</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="func-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Decorators</span>
+                    </div>
+                    <p class="concept-description">Functions that modify other functions. @decorator syntax wraps target. Use functools.wraps to preserve metadata. Common: @staticmethod, @classmethod, @property.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@decorator</span>
+                        <span class="concept-tag">functools.wraps</span>
+                        <span class="concept-tag">Wrapper</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good to Know - Exception Handling -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">Good to Know</span>
+                <span class="priority-title">Exception Handling</span>
+                <span class="priority-count" id="exc-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="exc-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">try/except/finally</span>
+                    </div>
+                    <p class="concept-description">try for risky code, except catches errors, finally always runs. Catch specific exceptions first. Use else for code that runs on success only.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">try</span>
+                        <span class="concept-tag">except</span>
+                        <span class="concept-tag">finally</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="exc-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Custom Exceptions</span>
+                    </div>
+                    <p class="concept-description">Inherit from Exception or specific built-in exceptions. Add custom attributes for context. class NotFoundError(Exception): pass. Use for domain-specific errors.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">class Error(Exception)</span>
+                        <span class="concept-tag">raise</span>
+                        <span class="concept-tag">Domain</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="exc-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Exception Chaining</span>
+                    </div>
+                    <p class="concept-description">raise NewError() from original_error preserves traceback. Shows both exceptions in output. raise from None to suppress context. Python 3 feature.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">raise from</span>
+                        <span class="concept-tag">__cause__</span>
+                        <span class="concept-tag">Traceback</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="exc-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Built-in Exceptions</span>
+                    </div>
+                    <p class="concept-description">ValueError: wrong value. TypeError: wrong type. KeyError: missing dict key. AttributeError: missing attribute. FileNotFoundError: file doesn't exist.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">ValueError</span>
+                        <span class="concept-tag">TypeError</span>
+                        <span class="concept-tag">KeyError</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good to Know - Advanced -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">Good to Know</span>
+                <span class="priority-title">Advanced Concepts</span>
+                <span class="priority-count" id="adv-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="adv-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Metaclasses</span>
+                    </div>
+                    <p class="concept-description">Classes that create classes. type is the default metaclass. Use class Meta(type) for custom behavior. Rarely needed - consider decorators or __init_subclass__ first.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">type</span>
+                        <span class="concept-tag">__new__</span>
+                        <span class="concept-tag">metaclass=</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="adv-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Descriptors</span>
+                    </div>
+                    <p class="concept-description">Objects defining __get__, __set__, __delete__. Power behind @property, @classmethod. Enable attribute access customization. Used in ORMs and validators.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">__get__</span>
+                        <span class="concept-tag">__set__</span>
+                        <span class="concept-tag">Property</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="adv-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">__slots__</span>
+                    </div>
+                    <p class="concept-description">Restrict instance attributes to declared names. Saves memory by avoiding __dict__. __slots__ = ['x', 'y']. Trade flexibility for efficiency in many instances.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">__slots__</span>
+                        <span class="concept-tag">Memory</span>
+                        <span class="concept-tag">Performance</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="adv-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">GIL and Multiprocessing</span>
+                    </div>
+                    <p class="concept-description">Global Interpreter Lock prevents true parallelism in threads. Use multiprocessing for CPU-bound tasks. Threading fine for I/O-bound. concurrent.futures for high-level API.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">GIL</span>
+                        <span class="concept-tag">multiprocessing</span>
+                        <span class="concept-tag">ProcessPoolExecutor</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Built for learning Python | <a href="https://docs.python.org/3/" target="_blank">Python Docs</a> | <a href="https://realpython.com/" target="_blank">Real Python</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize state from localStorage
+        function loadState() {
+            const checkboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                const saved = localStorage.getItem('python-core-' + id);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    card.classList.add('checked');
+                }
+            });
+            updateProgress();
+        }
+
+        // Save state to localStorage
+        function saveState(id, checked) {
+            localStorage.setItem('python-core-' + id, checked);
+        }
+
+        // Filter concepts by priority
+        function filterConcepts(filter) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide sections
+            const sections = document.querySelectorAll('.priority-section');
+            
+            sections.forEach(section => {
+                const priority = section.dataset.priority;
+                
+                if (filter === 'all') {
+                    section.classList.remove('hidden');
+                } else if (filter === priority) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+
+        // Update progress
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            const total = allCheckboxes.length;
+            let completed = 0;
+
+            // Update individual cards and count
+            allCheckboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                
+                if (checkbox.checked) {
+                    completed++;
+                    card.classList.add('checked');
+                } else {
+                    card.classList.remove('checked');
+                }
+                
+                saveState(id, checkbox.checked);
+            });
+
+            // Update overall progress
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('percent-complete').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+
+            // Update section counts
+            const sections = ['oop', 'modern', 'data', 'async', 'func', 'exc', 'adv'];
+            sections.forEach(section => {
+                const cards = document.querySelectorAll(`.concept-card[data-id^="${section}-"]`);
+                const sectionTotal = cards.length;
+                let sectionCompleted = 0;
+                
+                cards.forEach(card => {
+                    const checkbox = card.querySelector('input[type="checkbox"]');
+                    if (checkbox && checkbox.checked) sectionCompleted++;
+                });
+                
+                const countElement = document.getElementById(`${section}-count`);
+                if (countElement) {
+                    countElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadState);
+    </script>
+    
+    <!-- GitHub Progress Sync -->
+    <script src="github-sync.js"></script>
+</body>
+</html>
