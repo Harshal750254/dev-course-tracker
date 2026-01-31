@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Learning Plan | 6-Week Intensive</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #262c36;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-green: #238636;
+            --accent-green-bright: #3fb950;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --gradient-start: #0d1117;
+            --gradient-end: #161b22;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-green-bright);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: ">";
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-green-bright);
+            background: rgba(35, 134, 54, 0.15);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-green-bright), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green-bright);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-green-bright));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Week Cards */
+        .week-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .week-card:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 20px rgba(35, 134, 54, 0.1);
+        }
+
+        .week-header {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(35, 134, 54, 0.05), transparent);
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .week-header:hover {
+            background: linear-gradient(90deg, rgba(35, 134, 54, 0.1), transparent);
+        }
+
+        .week-card.open .week-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        .week-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .week-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-green-bright);
+            background: rgba(35, 134, 54, 0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .week-theme {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .week-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .week-progress {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .week-progress.complete {
+            color: var(--accent-green-bright);
+        }
+
+        .expand-icon {
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+            font-size: 1.25rem;
+        }
+
+        .week-card.open .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .week-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .week-card.open .week-content {
+            max-height: 1000px;
+        }
+
+        .week-inner {
+            padding: 1.5rem;
+        }
+
+        .week-goals {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .week-goals h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .week-goals p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .output-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(163, 113, 247, 0.1);
+            color: var(--accent-purple);
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            margin: 0 -0.5rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .checkbox-wrapper input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 20px;
+            width: 20px;
+        }
+
+        .checkmark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-wrapper:hover .checkmark {
+            border-color: var(--accent-green);
+        }
+
+        .checkbox-wrapper input:checked ~ .checkmark {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .checkmark::after {
+            content: "✓";
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-wrapper input:checked ~ .checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item.checked .item-title {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .nav-content {
+                padding: 1rem;
+            }
+
+            .progress-stats {
+                gap: 1rem;
+            }
+
+            .week-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .week-meta {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">SpringBoot_Plan</a>
+            <div class="nav-links">
+                <a href="index.html" class="active">Weekly Schedule</a>
+                <a href="concepts.html">Spring Concepts</a>
+                <a href="java-core.html">Java Core</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>6-Week Intensive Learning</h1>
+            <p>Master Spring Boot from Foundation to Production</p>
+        </header>
+
+        <section class="progress-section">
+            <div class="progress-header">
+                <h2>Overall Progress</h2>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="completed-count">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="total-count">37</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="percent-complete">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <!-- Week 1 -->
+        <div class="week-card open" data-week="1">
+            <div class="week-header" onclick="toggleWeek(1)">
+                <div class="week-title">
+                    <span class="week-number">WEEK 1</span>
+                    <span class="week-theme">Foundation & IoC</span>
+                </div>
+                <div class="week-meta">
+                    <span class="week-progress" id="week1-progress">0/8</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="week-content">
+                <div class="week-inner">
+                    <div class="week-goals">
+                        <h4>Key Goals</h4>
+                        <p>Java 17 constructs, Maven builds, Bean Lifecycle, DI patterns (Constructor vs Setter)</p>
+                        <span class="output-badge">📦 Output: Console ToDo CLI App</span>
+                    </div>
+                    <ul class="checklist" id="week1-checklist">
+                        <li class="checklist-item" data-id="w1-1">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Install JDK 17+ and configure IDE (IntelliJ IDEA recommended)</div>
+                                <div class="item-tags">
+                                    <span class="tag">setup</span>
+                                    <span class="tag">JDK 17</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-2">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Master OOP fundamentals: Classes, Inheritance, Interfaces, Polymorphism</div>
+                                <div class="item-tags">
+                                    <span class="tag">Java Core</span>
+                                    <span class="tag">OOP</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-3">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Learn Collections framework: ArrayList, HashMap, HashSet</div>
+                                <div class="item-tags">
+                                    <span class="tag">Collections</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-4">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand Java Records, Sealed Classes, and Functional Interfaces</div>
+                                <div class="item-tags">
+                                    <span class="tag">Java 17+</span>
+                                    <span class="tag">Records</span>
+                                    <span class="tag">Lambdas</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-5">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Set up Maven project: understand pom.xml, dependencies, and build lifecycle</div>
+                                <div class="item-tags">
+                                    <span class="tag">Maven</span>
+                                    <span class="tag">Build Tools</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-6">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Learn Git basics: init, commit, branch, merge, push to GitHub</div>
+                                <div class="item-tags">
+                                    <span class="tag">Git</span>
+                                    <span class="tag">GitHub</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-7">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand IoC and Dependency Injection concepts</div>
+                                <div class="item-tags">
+                                    <span class="tag">Spring Core</span>
+                                    <span class="tag">IoC</span>
+                                    <span class="tag">DI</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w1-8">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Learn Bean Lifecycle and scopes (Singleton, Prototype)</div>
+                                <div class="item-tags">
+                                    <span class="tag">Beans</span>
+                                    <span class="tag">Scopes</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 2 -->
+        <div class="week-card" data-week="2">
+            <div class="week-header" onclick="toggleWeek(2)">
+                <div class="week-title">
+                    <span class="week-number">WEEK 2</span>
+                    <span class="week-theme">REST Web Layer</span>
+                </div>
+                <div class="week-meta">
+                    <span class="week-progress" id="week2-progress">0/7</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="week-content">
+                <div class="week-inner">
+                    <div class="week-goals">
+                        <h4>Key Goals</h4>
+                        <p>MVC Architecture, DispatcherServlet flow, DTO mapping, Exception Handling, Validation</p>
+                        <span class="output-badge">📦 Output: Task Manager API (in-memory storage)</span>
+                    </div>
+                    <ul class="checklist" id="week2-checklist">
+                        <li class="checklist-item" data-id="w2-1">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Create first Spring Boot app using Spring Initializr (start.spring.io)</div>
+                                <div class="item-tags">
+                                    <span class="tag">Spring Boot</span>
+                                    <span class="tag">Initializr</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w2-2">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand @RestController vs @Controller, request mapping annotations</div>
+                                <div class="item-tags">
+                                    <span class="tag">Controllers</span>
+                                    <span class="tag">@GetMapping</span>
+                                    <span class="tag">@PostMapping</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w2-3">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement DTOs and understand Entity vs DTO separation</div>
+                                <div class="item-tags">
+                                    <span class="tag">DTOs</span>
+                                    <span class="tag">Data Transfer</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w2-4">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Add input validation with @Valid, @NotNull, @Size annotations</div>
+                                <div class="item-tags">
+                                    <span class="tag">Validation</span>
+                                    <span class="tag">Bean Validation</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w2-5">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement global exception handling with @ControllerAdvice</div>
+                                <div class="item-tags">
+                                    <span class="tag">@ExceptionHandler</span>
+                                    <span class="tag">Error Handling</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w2-6">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand JSON serialization with Jackson, configure ObjectMapper</div>
+                                <div class="item-tags">
+                                    <span class="tag">Jackson</span>
+                                    <span class="tag">JSON</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w2-7">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Master HTTP methods semantics: GET, POST, PUT, PATCH, DELETE</div>
+                                <div class="item-tags">
+                                    <span class="tag">REST</span>
+                                    <span class="tag">HTTP Methods</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 3 -->
+        <div class="week-card" data-week="3">
+            <div class="week-header" onclick="toggleWeek(3)">
+                <div class="week-title">
+                    <span class="week-number">WEEK 3</span>
+                    <span class="week-theme">Persistence</span>
+                </div>
+                <div class="week-meta">
+                    <span class="week-progress" id="week3-progress">0/6</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="week-content">
+                <div class="week-inner">
+                    <div class="week-goals">
+                        <h4>Key Goals</h4>
+                        <p>JPA Entities, Repositories, Relationships (One-to-Many), Transaction boundaries</p>
+                        <span class="output-badge">📦 Output: Task Manager connected to PostgreSQL</span>
+                    </div>
+                    <ul class="checklist" id="week3-checklist">
+                        <li class="checklist-item" data-id="w3-1">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Set up PostgreSQL/H2 database and configure datasource</div>
+                                <div class="item-tags">
+                                    <span class="tag">Database</span>
+                                    <span class="tag">PostgreSQL</span>
+                                    <span class="tag">H2</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w3-2">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Create JPA Entities with @Entity, @Id, @GeneratedValue</div>
+                                <div class="item-tags">
+                                    <span class="tag">JPA</span>
+                                    <span class="tag">Entities</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w3-3">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement entity relationships: @OneToMany, @ManyToOne, @ManyToMany</div>
+                                <div class="item-tags">
+                                    <span class="tag">Relationships</span>
+                                    <span class="tag">Mappings</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w3-4">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Use Spring Data JPA repositories and derived query methods</div>
+                                <div class="item-tags">
+                                    <span class="tag">Repository</span>
+                                    <span class="tag">CRUD</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w3-5">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand @Transactional and transaction propagation</div>
+                                <div class="item-tags">
+                                    <span class="tag">Transactions</span>
+                                    <span class="tag">ACID</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w3-6">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Set up database migrations with Flyway</div>
+                                <div class="item-tags">
+                                    <span class="tag">Flyway</span>
+                                    <span class="tag">Migrations</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 4 -->
+        <div class="week-card" data-week="4">
+            <div class="week-header" onclick="toggleWeek(4)">
+                <div class="week-title">
+                    <span class="week-number">WEEK 4</span>
+                    <span class="week-theme">Security</span>
+                </div>
+                <div class="week-meta">
+                    <span class="week-progress" id="week4-progress">0/6</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="week-content">
+                <div class="week-inner">
+                    <div class="week-goals">
+                        <h4>Key Goals</h4>
+                        <p>Authentication flow, Filter Chain, JWT generation/validation, Password Encoding (BCrypt)</p>
+                        <span class="output-badge">📦 Output: Secured API with user auth</span>
+                    </div>
+                    <ul class="checklist" id="week4-checklist">
+                        <li class="checklist-item" data-id="w4-1">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Add Spring Security dependency and understand filter chain</div>
+                                <div class="item-tags">
+                                    <span class="tag">Spring Security</span>
+                                    <span class="tag">Filters</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w4-2">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand Authentication vs Authorization concepts</div>
+                                <div class="item-tags">
+                                    <span class="tag">AuthN</span>
+                                    <span class="tag">AuthZ</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w4-3">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement UserDetailsService for custom user loading</div>
+                                <div class="item-tags">
+                                    <span class="tag">UserDetailsService</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w4-4">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement JWT token generation and validation</div>
+                                <div class="item-tags">
+                                    <span class="tag">JWT</span>
+                                    <span class="tag">Tokens</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w4-5">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Configure role-based authorization with @PreAuthorize</div>
+                                <div class="item-tags">
+                                    <span class="tag">Roles</span>
+                                    <span class="tag">@PreAuthorize</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w4-6">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Use BCrypt for password encoding</div>
+                                <div class="item-tags">
+                                    <span class="tag">BCrypt</span>
+                                    <span class="tag">Password Encoding</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 5 -->
+        <div class="week-card" data-week="5">
+            <div class="week-header" onclick="toggleWeek(5)">
+                <div class="week-title">
+                    <span class="week-number">WEEK 5</span>
+                    <span class="week-theme">Testing & Quality</span>
+                </div>
+                <div class="week-meta">
+                    <span class="week-progress" id="week5-progress">0/5</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="week-content">
+                <div class="week-inner">
+                    <div class="week-goals">
+                        <h4>Key Goals</h4>
+                        <p>Unit Testing (Mockito), Slice Testing (@WebMvcTest), Integration Testing (Testcontainers)</p>
+                        <span class="output-badge">📦 Output: 80% test coverage + Swagger docs</span>
+                    </div>
+                    <ul class="checklist" id="week5-checklist">
+                        <li class="checklist-item" data-id="w5-1">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Write unit tests with JUnit 5 and understand test lifecycle</div>
+                                <div class="item-tags">
+                                    <span class="tag">JUnit 5</span>
+                                    <span class="tag">Unit Tests</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w5-2">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Use Mockito for mocking: @Mock, @InjectMocks, when/thenReturn</div>
+                                <div class="item-tags">
+                                    <span class="tag">Mockito</span>
+                                    <span class="tag">Mocking</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w5-3">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Implement slice tests: @WebMvcTest, @DataJpaTest</div>
+                                <div class="item-tags">
+                                    <span class="tag">Slice Tests</span>
+                                    <span class="tag">MockMvc</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w5-4">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Set up integration tests with @SpringBootTest and Testcontainers</div>
+                                <div class="item-tags">
+                                    <span class="tag">Integration Tests</span>
+                                    <span class="tag">Testcontainers</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w5-5">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Add API documentation with SpringDoc OpenAPI (Swagger)</div>
+                                <div class="item-tags">
+                                    <span class="tag">Swagger</span>
+                                    <span class="tag">OpenAPI</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 6 -->
+        <div class="week-card" data-week="6">
+            <div class="week-header" onclick="toggleWeek(6)">
+                <div class="week-title">
+                    <span class="week-number">WEEK 6</span>
+                    <span class="week-theme">Ops & Microservices</span>
+                </div>
+                <div class="week-meta">
+                    <span class="week-progress" id="week6-progress">0/5</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="week-content">
+                <div class="week-inner">
+                    <div class="week-goals">
+                        <h4>Key Goals</h4>
+                        <p>Dockerization, Docker Compose, Actuator, Basic Service Decomposition</p>
+                        <span class="output-badge">📦 Output: Deployed microservices via docker-compose</span>
+                    </div>
+                    <ul class="checklist" id="week6-checklist">
+                        <li class="checklist-item" data-id="w6-1">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Create Dockerfile and containerize Spring Boot application</div>
+                                <div class="item-tags">
+                                    <span class="tag">Docker</span>
+                                    <span class="tag">Containerization</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w6-2">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Set up docker-compose with app and database services</div>
+                                <div class="item-tags">
+                                    <span class="tag">Docker Compose</span>
+                                    <span class="tag">Multi-container</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w6-3">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Enable Spring Boot Actuator for health and metrics endpoints</div>
+                                <div class="item-tags">
+                                    <span class="tag">Actuator</span>
+                                    <span class="tag">Monitoring</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w6-4">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Deploy application to cloud platform (Render/Railway/Heroku)</div>
+                                <div class="item-tags">
+                                    <span class="tag">Deployment</span>
+                                    <span class="tag">Cloud</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checklist-item" data-id="w6-5">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" onchange="updateProgress()">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="item-content">
+                                <div class="item-title">Understand microservices patterns: service decomposition, communication</div>
+                                <div class="item-tags">
+                                    <span class="tag">Microservices</span>
+                                    <span class="tag">Architecture</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built for learning Spring Boot | <a href="https://spring.io/guides" target="_blank">Spring Guides</a> | <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/" target="_blank">Documentation</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize state from localStorage
+        function loadState() {
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const item = checkbox.closest('.checklist-item');
+                const id = item.dataset.id;
+                const saved = localStorage.getItem('springboot-checklist-' + id);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    item.classList.add('checked');
+                }
+            });
+            updateProgress();
+        }
+
+        // Save state to localStorage
+        function saveState(id, checked) {
+            localStorage.setItem('springboot-checklist-' + id, checked);
+        }
+
+        // Toggle week card
+        function toggleWeek(weekNum) {
+            const card = document.querySelector(`.week-card[data-week="${weekNum}"]`);
+            card.classList.toggle('open');
+        }
+
+        // Update progress
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            const total = allCheckboxes.length;
+            let completed = 0;
+
+            // Update individual items and count
+            allCheckboxes.forEach(checkbox => {
+                const item = checkbox.closest('.checklist-item');
+                const id = item.dataset.id;
+                
+                if (checkbox.checked) {
+                    completed++;
+                    item.classList.add('checked');
+                } else {
+                    item.classList.remove('checked');
+                }
+                
+                saveState(id, checkbox.checked);
+            });
+
+            // Update overall progress
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('percent-complete').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+
+            // Update week progress
+            for (let week = 1; week <= 6; week++) {
+                const weekChecklist = document.getElementById(`week${week}-checklist`);
+                if (weekChecklist) {
+                    const weekCheckboxes = weekChecklist.querySelectorAll('input[type="checkbox"]');
+                    const weekTotal = weekCheckboxes.length;
+                    let weekCompleted = 0;
+                    weekCheckboxes.forEach(cb => {
+                        if (cb.checked) weekCompleted++;
+                    });
+                    
+                    const progressElement = document.getElementById(`week${week}-progress`);
+                    progressElement.textContent = `${weekCompleted}/${weekTotal}`;
+                    
+                    if (weekCompleted === weekTotal && weekTotal > 0) {
+                        progressElement.classList.add('complete');
+                    } else {
+                        progressElement.classList.remove('complete');
+                    }
+                }
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadState);
+    </script>
+</body>
+</html>

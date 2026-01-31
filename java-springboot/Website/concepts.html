@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Concepts | Priority-Based Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #262c36;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-green: #238636;
+            --accent-green-bright: #3fb950;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --accent-cyan: #39c5cf;
+            --gradient-start: #0d1117;
+            --gradient-end: #161b22;
+            --critical-bg: rgba(248, 81, 73, 0.1);
+            --critical-border: rgba(248, 81, 73, 0.3);
+            --important-bg: rgba(240, 136, 62, 0.1);
+            --important-border: rgba(240, 136, 62, 0.3);
+            --good-bg: rgba(88, 166, 255, 0.1);
+            --good-border: rgba(88, 166, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-green-bright);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: ">";
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-green-bright);
+            background: rgba(35, 134, 54, 0.15);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.6rem 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        .filter-btn.critical.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        .filter-btn.important.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
+
+        .filter-btn.good.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Priority Sections */
+        .priority-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .priority-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .priority-badge.critical {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border: 1px solid var(--critical-border);
+        }
+
+        .priority-badge.important {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border: 1px solid var(--important-border);
+        }
+
+        .priority-badge.good {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border: 1px solid var(--good-border);
+        }
+
+        .priority-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .priority-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Concept Cards Grid */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+        }
+
+        .concept-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .concept-card.critical::before {
+            background: var(--accent-red);
+        }
+
+        .concept-card.important::before {
+            background: var(--accent-orange);
+        }
+
+        .concept-card.good::before {
+            background: var(--accent-blue);
+        }
+
+        .concept-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .concept-card.checked {
+            opacity: 0.6;
+        }
+
+        .concept-card.checked::after {
+            content: '✓ Learned';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-green-bright);
+            background: rgba(35, 134, 54, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .concept-checkbox {
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+
+        .concept-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 18px;
+            width: 18px;
+        }
+
+        .concept-checkmark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox:hover .concept-checkmark {
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkmark::after {
+            content: "✓";
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .concept-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .concept-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .concept-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .concept-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-card.critical .concept-tag {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border-color: var(--critical-border);
+        }
+
+        .concept-card.important .concept-tag {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border-color: var(--important-border);
+        }
+
+        .concept-card.good .concept-tag {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border-color: var(--good-border);
+        }
+
+        /* Hidden cards when filtered */
+        .concept-card.hidden {
+            display: none;
+        }
+
+        .priority-section.hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.critical { background: var(--accent-red); }
+        .legend-color.important { background: var(--accent-orange); }
+        .legend-color.good { background: var(--accent-blue); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .nav-content {
+                padding: 1rem;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                gap: 1rem;
+            }
+
+            .filter-section {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .legend {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">SpringBoot_Plan</a>
+            <div class="nav-links">
+                <a href="index.html">Weekly Schedule</a>
+                <a href="concepts.html" class="active">Spring Concepts</a>
+                <a href="java-core.html">Java Core</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Core Concepts</h1>
+            <p>Priority-Based Learning Hierarchy (P0-P8)</p>
+        </header>
+
+        <section class="progress-section">
+            <div class="progress-header">
+                <h2>Concepts Mastered</h2>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="completed-count">0</div>
+                        <div class="stat-label">Learned</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="total-count">35</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="percent-complete">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color critical"></span>
+                <span>Critical (P0-P2) - Must Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color important"></span>
+                <span>Important (P3-P6) - Should Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color good"></span>
+                <span>Good to Know (P7-P8)</span>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all" onclick="filterConcepts('all')">All Concepts</button>
+            <button class="filter-btn critical" data-filter="critical" onclick="filterConcepts('critical')">Critical</button>
+            <button class="filter-btn important" data-filter="important" onclick="filterConcepts('important')">Important</button>
+            <button class="filter-btn good" data-filter="good" onclick="filterConcepts('good')">Good to Know</button>
+        </div>
+
+        <!-- P0 - Spring Core Container -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">P0</span>
+                <span class="priority-title">Spring Core Container</span>
+                <span class="priority-count" id="p0-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="p0-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Inversion of Control (IoC)</span>
+                    </div>
+                    <p class="concept-description">The framework manages object creation and wiring instead of the developer. The ApplicationContext is the IoC container that manages Bean lifecycles.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">ApplicationContext</span>
+                        <span class="concept-tag">Container</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Dependency Injection (DI)</span>
+                    </div>
+                    <p class="concept-description">Dependencies are "injected" into objects by the container rather than created by the object itself. Enables loose coupling and easier testing.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Autowired</span>
+                        <span class="concept-tag">Loose Coupling</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Constructor vs Setter vs Field Injection</span>
+                    </div>
+                    <p class="concept-description">Constructor injection is preferred for mandatory dependencies (allows final fields). Field injection (@Autowired on fields) is discouraged as it hides dependencies.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Constructor Injection</span>
+                        <span class="concept-tag">Best Practice</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Bean Scopes</span>
+                    </div>
+                    <p class="concept-description">Singleton (default): one instance per container. Prototype: new instance each request. Request/Session: tied to HTTP lifecycle. Singleton beans must be stateless!</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Singleton</span>
+                        <span class="concept-tag">Prototype</span>
+                        <span class="concept-tag">Request</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p0-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Component Scanning & Stereotypes</span>
+                    </div>
+                    <p class="concept-description">@Component, @Service, @Repository, @Controller mark classes as Spring-managed beans. Component scanning auto-detects these annotations.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Component</span>
+                        <span class="concept-tag">@Service</span>
+                        <span class="concept-tag">@Repository</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P1 - Spring Boot Internals -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">P1</span>
+                <span class="priority-title">Spring Boot Internals</span>
+                <span class="priority-count" id="p1-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="p1-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">@SpringBootApplication</span>
+                    </div>
+                    <p class="concept-description">Combines @Configuration, @EnableAutoConfiguration, and @ComponentScan. The entry point annotation for Spring Boot applications.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Entry Point</span>
+                        <span class="concept-tag">Main Class</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Auto-Configuration Mechanism</span>
+                    </div>
+                    <p class="concept-description">Spring Boot scans classpath for libraries and auto-configures beans. Uses @Conditional annotations to decide what to configure. Debug with --debug flag.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@EnableAutoConfiguration</span>
+                        <span class="concept-tag">Conditionals</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">@Conditional Annotations</span>
+                    </div>
+                    <p class="concept-description">@ConditionalOnClass, @ConditionalOnMissingBean control when auto-config activates. Allows defaults to "back off" when you define custom beans.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@ConditionalOnClass</span>
+                        <span class="concept-tag">@ConditionalOnMissingBean</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Spring Boot Starters</span>
+                    </div>
+                    <p class="concept-description">Dependency descriptors that bundle related libraries. spring-boot-starter-web pulls in Spring MVC, Jackson, Tomcat, etc. Simplifies dependency management.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">starter-web</span>
+                        <span class="concept-tag">starter-data-jpa</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p1-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Bill of Materials (BOM)</span>
+                    </div>
+                    <p class="concept-description">spring-boot-dependencies manages versions of transitive dependencies. Solves "JAR hell" by ensuring compatible library versions.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Version Management</span>
+                        <span class="concept-tag">Parent POM</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P2 - RESTful Web Services -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">P2</span>
+                <span class="priority-title">RESTful Web Services</span>
+                <span class="priority-count" id="p2-count">0/6</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="p2-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">@RestController vs @Controller</span>
+                    </div>
+                    <p class="concept-description">@RestController includes @ResponseBody, serializing return values directly to JSON. @Controller returns view names for template engines like Thymeleaf.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@RestController</span>
+                        <span class="concept-tag">@ResponseBody</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p2-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Request Mapping Annotations</span>
+                    </div>
+                    <p class="concept-description">@GetMapping, @PostMapping, @PutMapping, @PatchMapping, @DeleteMapping for HTTP method-specific routing. Use correct semantics!</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@GetMapping</span>
+                        <span class="concept-tag">@PostMapping</span>
+                        <span class="concept-tag">@RequestMapping</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p2-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Path and Query Parameters</span>
+                    </div>
+                    <p class="concept-description">@PathVariable extracts from URL path (/users/{id}). @RequestParam extracts query params (?name=value). @RequestBody deserializes JSON body.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@PathVariable</span>
+                        <span class="concept-tag">@RequestParam</span>
+                        <span class="concept-tag">@RequestBody</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p2-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">JSON Serialization (Jackson)</span>
+                    </div>
+                    <p class="concept-description">Jackson auto-converts Java objects to/from JSON. Use @JsonIgnore, @JsonProperty for customization. Configure ObjectMapper for date formats, etc.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Jackson</span>
+                        <span class="concept-tag">ObjectMapper</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p2-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">DTOs vs Entities</span>
+                    </div>
+                    <p class="concept-description">Never expose JPA entities directly! DTOs define API contracts, decouple internal models from public API. Use Records for immutable DTOs. MapStruct for mapping.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Data Transfer Objects</span>
+                        <span class="concept-tag">Records</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="p2-6">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Global Exception Handling</span>
+                    </div>
+                    <p class="concept-description">@ControllerAdvice + @ExceptionHandler provide centralized error handling. Return standardized error responses with proper HTTP status codes.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@ControllerAdvice</span>
+                        <span class="concept-tag">@ExceptionHandler</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P3 - Data Persistence -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">P3</span>
+                <span class="priority-title">Data Persistence</span>
+                <span class="priority-count" id="p3-count">0/6</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="p3-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Spring Data JPA</span>
+                    </div>
+                    <p class="concept-description">Abstraction over JPA/Hibernate. Reduces boilerplate by generating repository implementations from interface definitions at runtime.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">JpaRepository</span>
+                        <span class="concept-tag">CrudRepository</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Entity Mapping</span>
+                    </div>
+                    <p class="concept-description">@Entity marks JPA entities. @Id + @GeneratedValue for primary keys. @Column for field customization. @Table for table naming.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Entity</span>
+                        <span class="concept-tag">@Id</span>
+                        <span class="concept-tag">@Column</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Repository Pattern</span>
+                    </div>
+                    <p class="concept-description">Extend JpaRepository<Entity, ID> to get full CRUD for free. Spring generates implementation at runtime using proxies.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Repository Interface</span>
+                        <span class="concept-tag">Proxy</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Derived Query Methods</span>
+                    </div>
+                    <p class="concept-description">Spring parses method names to generate queries: findByEmailAndIsActiveTrue() becomes SQL automatically. Magic method naming conventions!</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">findBy</span>
+                        <span class="concept-tag">Query Derivation</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">JPQL and Native Queries</span>
+                    </div>
+                    <p class="concept-description">@Query annotation for custom JPQL or native SQL. Use for complex joins and optimizations. Named parameters with :paramName.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Query</span>
+                        <span class="concept-tag">JPQL</span>
+                        <span class="concept-tag">Native SQL</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p3-6">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Transaction Management</span>
+                    </div>
+                    <p class="concept-description">@Transactional ensures ACID properties. Understand propagation levels. Beware: calling @Transactional from same class bypasses proxy!</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Transactional</span>
+                        <span class="concept-tag">Propagation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P4 - Configuration Management -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">P4</span>
+                <span class="priority-title">Configuration Management</span>
+                <span class="priority-count" id="p4-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="p4-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">application.properties / yml</span>
+                    </div>
+                    <p class="concept-description">Central configuration files in src/main/resources. YAML offers hierarchical structure. Properties for flat key-value pairs.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">application.yml</span>
+                        <span class="concept-tag">application.properties</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p4-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">@Value Annotation</span>
+                    </div>
+                    <p class="concept-description">Inject single property values: @Value("${app.name}"). Supports SpEL expressions and default values: @Value("${port:8080}").</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Value</span>
+                        <span class="concept-tag">SpEL</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p4-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">@ConfigurationProperties</span>
+                    </div>
+                    <p class="concept-description">Type-safe configuration binding. Map groups of properties to POJOs. Better than @Value for complex configs. Enable with @EnableConfigurationProperties.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@ConfigurationProperties</span>
+                        <span class="concept-tag">Type-safe</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p4-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Profiles (dev/prod)</span>
+                    </div>
+                    <p class="concept-description">Environment-specific configs with @Profile and application-{profile}.yml. Activate with spring.profiles.active. Prevent credential hardcoding!</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Profile</span>
+                        <span class="concept-tag">application-dev.yml</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p4-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Environment Variables</span>
+                    </div>
+                    <p class="concept-description">Override properties via env vars: SPRING_DATASOURCE_PASSWORD. 12-factor app compliance. Essential for containerized deployments.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Environment Vars</span>
+                        <span class="concept-tag">12-Factor</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P5 - Testing -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">P5</span>
+                <span class="priority-title">Testing</span>
+                <span class="priority-count" id="p5-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="p5-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">JUnit 5</span>
+                    </div>
+                    <p class="concept-description">Modern testing framework. @Test, @BeforeEach, @AfterEach for lifecycle. @DisplayName for readable test names. Assertions and assumptions.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Test</span>
+                        <span class="concept-tag">Assertions</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p5-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Mockito</span>
+                    </div>
+                    <p class="concept-description">Mock dependencies for isolated unit testing. @Mock creates mocks, @InjectMocks injects them. when().thenReturn() for stubbing behavior.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Mock</span>
+                        <span class="concept-tag">@InjectMocks</span>
+                        <span class="concept-tag">when/thenReturn</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p5-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">@SpringBootTest</span>
+                    </div>
+                    <p class="concept-description">Loads full application context for integration testing. Powerful but slower. Use for end-to-end testing of multiple layers working together.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@SpringBootTest</span>
+                        <span class="concept-tag">Integration Test</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p5-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Slice Tests</span>
+                    </div>
+                    <p class="concept-description">@WebMvcTest loads only web layer, mocks services. @DataJpaTest loads only persistence layer with in-memory DB. Faster than full context.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@WebMvcTest</span>
+                        <span class="concept-tag">@DataJpaTest</span>
+                        <span class="concept-tag">MockMvc</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p5-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Testcontainers</span>
+                    </div>
+                    <p class="concept-description">Spin up real databases in Docker for tests. Ensures environment parity with production. Eliminates H2 vs PostgreSQL discrepancies.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Testcontainers</span>
+                        <span class="concept-tag">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P6 - Security -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">P6</span>
+                <span class="priority-title">Security</span>
+                <span class="priority-count" id="p6-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="p6-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Security Filter Chain</span>
+                    </div>
+                    <p class="concept-description">Spring Security operates as a chain of servlet filters intercepting requests. Configure via SecurityFilterChain bean. Order matters!</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">SecurityFilterChain</span>
+                        <span class="concept-tag">Filters</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p6-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Authentication vs Authorization</span>
+                    </div>
+                    <p class="concept-description">Authentication: "Who are you?" (login). Authorization: "What can you do?" (permissions). AuthenticationManager validates, AccessDecisionManager authorizes.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">AuthN</span>
+                        <span class="concept-tag">AuthZ</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p6-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">UserDetailsService</span>
+                    </div>
+                    <p class="concept-description">Interface for loading user-specific data. Implement to fetch users from database. Returns UserDetails with username, password, authorities.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">UserDetailsService</span>
+                        <span class="concept-tag">UserDetails</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p6-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">JWT Implementation</span>
+                    </div>
+                    <p class="concept-description">Stateless authentication with JSON Web Tokens. Client sends token in Authorization header. Custom filter validates and populates SecurityContext.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">JWT</span>
+                        <span class="concept-tag">Bearer Token</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="p6-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">OAuth2 Basics</span>
+                    </div>
+                    <p class="concept-description">Delegated authorization ("Login with Google"). Understand flows: Authorization Code, Client Credentials. Spring as Resource Server or OAuth2 Client.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">OAuth2</span>
+                        <span class="concept-tag">OpenID Connect</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P7 - Observability -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">P7</span>
+                <span class="priority-title">Observability</span>
+                <span class="priority-count" id="p7-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="p7-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Spring Boot Actuator</span>
+                    </div>
+                    <p class="concept-description">Production-ready features: /health, /metrics, /info endpoints. Monitor application state. Configure exposure and security in production.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Actuator</span>
+                        <span class="concept-tag">/health</span>
+                        <span class="concept-tag">/metrics</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p7-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Health Endpoints</span>
+                    </div>
+                    <p class="concept-description">Custom health indicators for dependencies. Aggregate health status. Kubernetes liveness/readiness probes integration.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">HealthIndicator</span>
+                        <span class="concept-tag">Probes</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p7-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Micrometer Metrics</span>
+                    </div>
+                    <p class="concept-description">"SLF4J for metrics" - vendor-neutral instrumentation. Ships to Prometheus, Datadog, New Relic without code changes. Counters, gauges, timers.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Micrometer</span>
+                        <span class="concept-tag">Prometheus</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p7-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Logging (SLF4J, Logback)</span>
+                    </div>
+                    <p class="concept-description">SLF4J as logging facade, Logback as implementation. Configure levels, appenders, patterns in logback-spring.xml. MDC for request tracing.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">SLF4J</span>
+                        <span class="concept-tag">Logback</span>
+                        <span class="concept-tag">MDC</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P8 - Microservices -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">P8</span>
+                <span class="priority-title">Microservices</span>
+                <span class="priority-count" id="p8-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="p8-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Modular Monolith vs Microservices</span>
+                    </div>
+                    <p class="concept-description">Start with modular monolith! Microservices add network complexity, distributed transactions, eventual consistency. Only decompose when necessary.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Architecture</span>
+                        <span class="concept-tag">Modularity</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p8-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Service Communication</span>
+                    </div>
+                    <p class="concept-description">Synchronous: OpenFeign (declarative), WebClient (reactive). Asynchronous: Kafka, RabbitMQ for event-driven architecture. RestTemplate is deprecated.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">OpenFeign</span>
+                        <span class="concept-tag">WebClient</span>
+                        <span class="concept-tag">Kafka</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p8-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Docker and Containerization</span>
+                    </div>
+                    <p class="concept-description">Package Spring Boot JARs in Docker images. Use Buildpacks for Dockerfile-less builds. Docker Compose for multi-container local dev.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Docker</span>
+                        <span class="concept-tag">Buildpacks</span>
+                        <span class="concept-tag">Compose</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="p8-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Cloud Deployment Options</span>
+                    </div>
+                    <p class="concept-description">PaaS: Render, Railway, Heroku (simple). IaaS: AWS EC2, GCP (control). Free tiers: Oracle Cloud, Render free tier for student projects.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Render</span>
+                        <span class="concept-tag">Railway</span>
+                        <span class="concept-tag">AWS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Built for learning Spring Boot | <a href="https://spring.io/guides" target="_blank">Spring Guides</a> | <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/" target="_blank">Documentation</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize state from localStorage
+        function loadState() {
+            const checkboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                const saved = localStorage.getItem('springboot-concepts-' + id);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    card.classList.add('checked');
+                }
+            });
+            updateProgress();
+        }
+
+        // Save state to localStorage
+        function saveState(id, checked) {
+            localStorage.setItem('springboot-concepts-' + id, checked);
+        }
+
+        // Filter concepts by priority
+        function filterConcepts(filter) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide sections and cards
+            const sections = document.querySelectorAll('.priority-section');
+            
+            sections.forEach(section => {
+                const priority = section.dataset.priority;
+                
+                if (filter === 'all') {
+                    section.classList.remove('hidden');
+                } else if (filter === priority) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+
+        // Update progress
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            const total = allCheckboxes.length;
+            let completed = 0;
+
+            // Update individual cards and count
+            allCheckboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                
+                if (checkbox.checked) {
+                    completed++;
+                    card.classList.add('checked');
+                } else {
+                    card.classList.remove('checked');
+                }
+                
+                saveState(id, checkbox.checked);
+            });
+
+            // Update overall progress
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('percent-complete').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+
+            // Update priority section counts
+            const priorities = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'];
+            priorities.forEach(priority => {
+                const cards = document.querySelectorAll(`.concept-card[data-id^="${priority}-"]`);
+                const sectionTotal = cards.length;
+                let sectionCompleted = 0;
+                
+                cards.forEach(card => {
+                    const checkbox = card.querySelector('input[type="checkbox"]');
+                    if (checkbox && checkbox.checked) sectionCompleted++;
+                });
+                
+                const countElement = document.getElementById(`${priority}-count`);
+                if (countElement) {
+                    countElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadState);
+    </script>
+</body>
+</html>

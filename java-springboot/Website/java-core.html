@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Core Concepts | Programming Fundamentals</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #262c36;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-green: #238636;
+            --accent-green-bright: #3fb950;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --accent-cyan: #39c5cf;
+            --gradient-start: #0d1117;
+            --gradient-end: #161b22;
+            --critical-bg: rgba(248, 81, 73, 0.1);
+            --critical-border: rgba(248, 81, 73, 0.3);
+            --backend-bg: rgba(163, 113, 247, 0.1);
+            --backend-border: rgba(163, 113, 247, 0.3);
+            --important-bg: rgba(240, 136, 62, 0.1);
+            --important-border: rgba(240, 136, 62, 0.3);
+            --good-bg: rgba(88, 166, 255, 0.1);
+            --good-border: rgba(88, 166, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-green-bright);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: ">";
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-orange);
+            background: rgba(240, 136, 62, 0.15);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.critical { background: var(--accent-red); }
+        .legend-color.backend { background: var(--accent-purple); }
+        .legend-color.important { background: var(--accent-orange); }
+        .legend-color.good { background: var(--accent-blue); }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.6rem 1.1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-orange);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            color: white;
+        }
+
+        .filter-btn.critical.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        .filter-btn.backend.active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .filter-btn.important.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
+
+        .filter-btn.good.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Priority Sections */
+        .priority-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .priority-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .priority-badge.critical {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border: 1px solid var(--critical-border);
+        }
+
+        .priority-badge.backend {
+            background: var(--backend-bg);
+            color: var(--accent-purple);
+            border: 1px solid var(--backend-border);
+        }
+
+        .priority-badge.important {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border: 1px solid var(--important-border);
+        }
+
+        .priority-badge.good {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border: 1px solid var(--good-border);
+        }
+
+        .priority-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .priority-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-left: 0.5rem;
+        }
+
+        .priority-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Concept Cards Grid */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+        }
+
+        .concept-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .concept-card.critical::before { background: var(--accent-red); }
+        .concept-card.backend::before { background: var(--accent-purple); }
+        .concept-card.important::before { background: var(--accent-orange); }
+        .concept-card.good::before { background: var(--accent-blue); }
+
+        .concept-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .concept-card.checked {
+            opacity: 0.6;
+        }
+
+        .concept-card.checked::after {
+            content: '✓ Learned';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-green-bright);
+            background: rgba(35, 134, 54, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .concept-checkbox {
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+
+        .concept-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 18px;
+            width: 18px;
+        }
+
+        .concept-checkmark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox:hover .concept-checkmark {
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .concept-checkmark::after {
+            content: "✓";
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .concept-checkbox input:checked ~ .concept-checkmark::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .concept-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .concept-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .concept-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .concept-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-card.critical .concept-tag {
+            background: var(--critical-bg);
+            color: var(--accent-red);
+            border-color: var(--critical-border);
+        }
+
+        .concept-card.backend .concept-tag {
+            background: var(--backend-bg);
+            color: var(--accent-purple);
+            border-color: var(--backend-border);
+        }
+
+        .concept-card.important .concept-tag {
+            background: var(--important-bg);
+            color: var(--accent-orange);
+            border-color: var(--important-border);
+        }
+
+        .concept-card.good .concept-tag {
+            background: var(--good-bg);
+            color: var(--accent-blue);
+            border-color: var(--good-border);
+        }
+
+        /* Hidden cards when filtered */
+        .concept-card.hidden {
+            display: none;
+        }
+
+        .priority-section.hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .nav-content {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                gap: 1rem;
+            }
+
+            .filter-section {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .legend {
+                gap: 0.75rem;
+            }
+
+            .legend-item {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">SpringBoot_Plan</a>
+            <div class="nav-links">
+                <a href="index.html">Weekly Schedule</a>
+                <a href="concepts.html">Spring Concepts</a>
+                <a href="java-core.html" class="active">Java Core</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Java Core Concepts</h1>
+            <p>Programming Fundamentals for Backend Development</p>
+        </header>
+
+        <section class="progress-section">
+            <div class="progress-header">
+                <h2>Java Concepts Mastered</h2>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="completed-count">0</div>
+                        <div class="stat-label">Learned</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="total-count">43</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="percent-complete">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color critical"></span>
+                <span>Critical - Must Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color backend"></span>
+                <span>Backend Essential</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color important"></span>
+                <span>Important - Should Know</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color good"></span>
+                <span>Good to Know</span>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all" onclick="filterConcepts('all')">All Concepts</button>
+            <button class="filter-btn critical" data-filter="critical" onclick="filterConcepts('critical')">Critical</button>
+            <button class="filter-btn backend" data-filter="backend" onclick="filterConcepts('backend')">Backend Essential</button>
+            <button class="filter-btn important" data-filter="important" onclick="filterConcepts('important')">Important</button>
+            <button class="filter-btn good" data-filter="good" onclick="filterConcepts('good')">Good to Know</button>
+        </div>
+
+        <!-- Critical - OOP Fundamentals -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">Critical</span>
+                <span class="priority-title">OOP Fundamentals</span>
+                <span class="priority-subtitle">P0</span>
+                <span class="priority-count" id="p0-count">0/8</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="j0-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Classes and Objects</span>
+                    </div>
+                    <p class="concept-description">Classes are blueprints for objects. Objects are instances of classes containing state (fields) and behavior (methods). The foundation of all Java programming.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">class</span>
+                        <span class="concept-tag">new</span>
+                        <span class="concept-tag">instance</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Constructors and Initialization</span>
+                    </div>
+                    <p class="concept-description">Special methods for object initialization. Default constructors, parameterized constructors, constructor chaining with this() and super().</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">constructor</span>
+                        <span class="concept-tag">this()</span>
+                        <span class="concept-tag">super()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Inheritance (extends)</span>
+                    </div>
+                    <p class="concept-description">Child classes inherit fields and methods from parent classes. Enables code reuse and establishes IS-A relationships. Single inheritance only in Java.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">extends</span>
+                        <span class="concept-tag">super</span>
+                        <span class="concept-tag">IS-A</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Polymorphism</span>
+                    </div>
+                    <p class="concept-description">Compile-time (method overloading) and runtime (method overriding) polymorphism. Same interface, different implementations. Core to Spring's DI.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">@Override</span>
+                        <span class="concept-tag">Overloading</span>
+                        <span class="concept-tag">Dynamic Dispatch</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Interfaces (implements)</span>
+                    </div>
+                    <p class="concept-description">Contracts defining what a class must do without specifying how. Multiple interface implementation allowed. Default and static methods since Java 8.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">interface</span>
+                        <span class="concept-tag">implements</span>
+                        <span class="concept-tag">default</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-6">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Abstract Classes vs Interfaces</span>
+                    </div>
+                    <p class="concept-description">Abstract classes can have state and partial implementation. Interfaces define pure contracts. Use abstract for shared code, interfaces for capabilities.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">abstract</span>
+                        <span class="concept-tag">When to Use</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-7">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Encapsulation (Access Modifiers)</span>
+                    </div>
+                    <p class="concept-description">Control visibility with public, private, protected, package-private. Hide implementation details, expose only what's necessary. Getters/setters pattern.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">public</span>
+                        <span class="concept-tag">private</span>
+                        <span class="concept-tag">protected</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j0-8">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Composition over Inheritance</span>
+                    </div>
+                    <p class="concept-description">Favor HAS-A relationships over IS-A. More flexible, loosely coupled designs. Dependency injection relies heavily on composition.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">HAS-A</span>
+                        <span class="concept-tag">Delegation</span>
+                        <span class="concept-tag">Flexibility</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Critical - Modern Java Essentials -->
+        <section class="priority-section" data-priority="critical">
+            <div class="priority-header">
+                <span class="priority-badge critical">Critical</span>
+                <span class="priority-title">Modern Java Essentials</span>
+                <span class="priority-subtitle">P1</span>
+                <span class="priority-count" id="p1-count">0/2</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card critical" data-id="j1-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Records (Java 14+)</span>
+                    </div>
+                    <p class="concept-description">Immutable data carriers with auto-generated constructors, getters, equals(), hashCode(), toString(). Perfect for DTOs in Spring Boot APIs.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">record</span>
+                        <span class="concept-tag">Immutable</span>
+                        <span class="concept-tag">DTO</span>
+                    </div>
+                </div>
+
+                <div class="concept-card critical" data-id="j1-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">var Keyword and Type Inference</span>
+                    </div>
+                    <p class="concept-description">Local variable type inference with var. Compiler infers type from initializer. Reduces verbosity while maintaining type safety.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">var</span>
+                        <span class="concept-tag">Type Inference</span>
+                        <span class="concept-tag">Java 10+</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backend Essential - Collections -->
+        <section class="priority-section" data-priority="backend">
+            <div class="priority-header">
+                <span class="priority-badge backend">Backend Essential</span>
+                <span class="priority-title">Collections Framework</span>
+                <span class="priority-subtitle">P2</span>
+                <span class="priority-count" id="p2-count">0/6</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card backend" data-id="j2-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">List Interface (ArrayList, LinkedList)</span>
+                    </div>
+                    <p class="concept-description">Ordered collections allowing duplicates. ArrayList for O(1) random access. LinkedList for O(1) insertions/deletions. Most common collection in APIs.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">ArrayList</span>
+                        <span class="concept-tag">LinkedList</span>
+                        <span class="concept-tag">List.of()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j2-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Map Interface (HashMap, TreeMap)</span>
+                    </div>
+                    <p class="concept-description">Key-value pairs. HashMap provides O(1) lookup - essential for caching. TreeMap maintains sorted order. LinkedHashMap preserves insertion order.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">HashMap</span>
+                        <span class="concept-tag">TreeMap</span>
+                        <span class="concept-tag">O(1) lookup</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j2-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Set Interface (HashSet, TreeSet)</span>
+                    </div>
+                    <p class="concept-description">Unique elements only. HashSet for O(1) contains check. TreeSet for sorted unique elements. Essential for deduplication.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">HashSet</span>
+                        <span class="concept-tag">TreeSet</span>
+                        <span class="concept-tag">No Duplicates</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j2-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Queue and Deque</span>
+                    </div>
+                    <p class="concept-description">FIFO ordering for task queues. LinkedList implements Queue. ArrayDeque for double-ended operations. Critical for message processing in backends.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Queue</span>
+                        <span class="concept-tag">Deque</span>
+                        <span class="concept-tag">FIFO</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j2-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Iterator and For-Each</span>
+                    </div>
+                    <p class="concept-description">Safe iteration over collections. Iterator allows removal during iteration. Enhanced for-loop for cleaner code. Iterable interface.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Iterator</span>
+                        <span class="concept-tag">for-each</span>
+                        <span class="concept-tag">Iterable</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j2-6">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Collections Utility Class</span>
+                    </div>
+                    <p class="concept-description">Static methods for sorting, searching, shuffling, reversing. Collections.unmodifiableList() for immutable wrappers. synchronizedList() for thread safety.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Collections.sort()</span>
+                        <span class="concept-tag">unmodifiable</span>
+                        <span class="concept-tag">synchronized</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backend Essential - Exception Handling -->
+        <section class="priority-section" data-priority="backend">
+            <div class="priority-header">
+                <span class="priority-badge backend">Backend Essential</span>
+                <span class="priority-title">Exception Handling</span>
+                <span class="priority-subtitle">P3</span>
+                <span class="priority-count" id="p3-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card backend" data-id="j3-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Checked vs Unchecked Exceptions</span>
+                    </div>
+                    <p class="concept-description">Checked exceptions must be handled (IOException). Unchecked extend RuntimeException (NullPointerException). APIs typically throw unchecked for cleaner code.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Exception</span>
+                        <span class="concept-tag">RuntimeException</span>
+                        <span class="concept-tag">throws</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j3-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Try-Catch-Finally Blocks</span>
+                    </div>
+                    <p class="concept-description">try for risky code, catch for handling, finally for cleanup. Multiple catch blocks. Catch specific exceptions before general ones.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">try</span>
+                        <span class="concept-tag">catch</span>
+                        <span class="concept-tag">finally</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j3-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Try-With-Resources</span>
+                    </div>
+                    <p class="concept-description">Automatic resource management for AutoCloseable resources. Ensures streams, connections are closed even if exceptions occur. Essential for DB connections.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">try-with-resources</span>
+                        <span class="concept-tag">AutoCloseable</span>
+                        <span class="concept-tag">Java 7+</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j3-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Custom Exceptions</span>
+                    </div>
+                    <p class="concept-description">Domain-specific exceptions (UserNotFoundException, InvalidOrderException). Extend RuntimeException for unchecked. Include meaningful messages and error codes.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">extends Exception</span>
+                        <span class="concept-tag">Domain Errors</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backend Essential - Concurrency -->
+        <section class="priority-section" data-priority="backend">
+            <div class="priority-header">
+                <span class="priority-badge backend">Backend Essential</span>
+                <span class="priority-title">Concurrency Basics</span>
+                <span class="priority-subtitle">P4</span>
+                <span class="priority-count" id="p4-count">0/2</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card backend" data-id="j4-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Thread and Runnable</span>
+                    </div>
+                    <p class="concept-description">Thread class for concurrent execution. Runnable interface for task definition. Understand thread states: NEW, RUNNABLE, BLOCKED, WAITING, TERMINATED.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Thread</span>
+                        <span class="concept-tag">Runnable</span>
+                        <span class="concept-tag">start()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card backend" data-id="j4-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">ExecutorService and Thread Pools</span>
+                    </div>
+                    <p class="concept-description">Manage thread pools instead of creating threads manually. Executors.newFixedThreadPool() for bounded pools. Submit tasks, get Futures. Essential for async processing.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">ExecutorService</span>
+                        <span class="concept-tag">ThreadPool</span>
+                        <span class="concept-tag">Future</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Important - Functional Programming -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">Important</span>
+                <span class="priority-title">Functional Programming</span>
+                <span class="priority-subtitle">P5</span>
+                <span class="priority-count" id="p5-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="j5-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Lambda Expressions</span>
+                    </div>
+                    <p class="concept-description">Anonymous functions with concise syntax: (params) -> expression. Enable functional programming style. Used extensively in Spring Security DSL and Stream API.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">-></span>
+                        <span class="concept-tag">Anonymous Function</span>
+                        <span class="concept-tag">Java 8+</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j5-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Functional Interfaces</span>
+                    </div>
+                    <p class="concept-description">Single abstract method interfaces. Predicate<T> for boolean tests, Function<T,R> for transformations, Consumer<T> for actions, Supplier<T> for providers.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Predicate</span>
+                        <span class="concept-tag">Function</span>
+                        <span class="concept-tag">Consumer</span>
+                        <span class="concept-tag">Supplier</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j5-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Method References (::)</span>
+                    </div>
+                    <p class="concept-description">Shorthand for lambdas calling existing methods. String::toUpperCase, System.out::println, User::new. Cleaner than equivalent lambdas.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">::</span>
+                        <span class="concept-tag">Reference</span>
+                        <span class="concept-tag">Shorthand</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j5-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Optional Class</span>
+                    </div>
+                    <p class="concept-description">Container for potentially null values. Avoid NullPointerException with Optional.ofNullable(), orElse(), orElseThrow(). Common in repository return types.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Optional</span>
+                        <span class="concept-tag">orElse</span>
+                        <span class="concept-tag">Null Safety</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j5-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Immutability Principles</span>
+                    </div>
+                    <p class="concept-description">Objects that cannot change after creation. final fields, no setters, defensive copies. Thread-safe by default. Records are immutable. Prefer for DTOs.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">final</span>
+                        <span class="concept-tag">Immutable</span>
+                        <span class="concept-tag">Thread-safe</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Important - Streams API -->
+        <section class="priority-section" data-priority="important">
+            <div class="priority-header">
+                <span class="priority-badge important">Important</span>
+                <span class="priority-title">Streams API</span>
+                <span class="priority-subtitle">P6</span>
+                <span class="priority-count" id="p6-count">0/5</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card important" data-id="j6-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Creating Streams</span>
+                    </div>
+                    <p class="concept-description">From collections: list.stream(). From values: Stream.of(). From arrays: Arrays.stream(). Infinite streams: Stream.generate(), Stream.iterate().</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">.stream()</span>
+                        <span class="concept-tag">Stream.of()</span>
+                        <span class="concept-tag">generate()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j6-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Intermediate Operations</span>
+                    </div>
+                    <p class="concept-description">Lazy operations returning streams. map() transforms, filter() selects, flatMap() flattens nested, sorted() orders, distinct() removes duplicates.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">map()</span>
+                        <span class="concept-tag">filter()</span>
+                        <span class="concept-tag">flatMap()</span>
+                        <span class="concept-tag">sorted()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j6-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Terminal Operations</span>
+                    </div>
+                    <p class="concept-description">Trigger processing and return result. collect() gathers results, reduce() aggregates, forEach() performs action, findFirst()/findAny() retrieves elements.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">collect()</span>
+                        <span class="concept-tag">reduce()</span>
+                        <span class="concept-tag">forEach()</span>
+                        <span class="concept-tag">findFirst()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j6-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Collectors Utility</span>
+                    </div>
+                    <p class="concept-description">Common collection strategies. toList(), toSet(), toMap() for basic collections. groupingBy() for grouping, joining() for strings, counting() for aggregates.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Collectors.toList()</span>
+                        <span class="concept-tag">groupingBy()</span>
+                        <span class="concept-tag">toMap()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card important" data-id="j6-5">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Parallel Streams</span>
+                    </div>
+                    <p class="concept-description">Automatic parallelization with parallelStream(). Uses ForkJoinPool. Best for CPU-intensive tasks on large datasets. Watch for side effects and ordering.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">parallelStream()</span>
+                        <span class="concept-tag">ForkJoinPool</span>
+                        <span class="concept-tag">Parallel</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good to Know - Advanced Modern Java -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">Good to Know</span>
+                <span class="priority-title">Advanced Modern Java</span>
+                <span class="priority-subtitle">P7</span>
+                <span class="priority-count" id="p7-count">0/4</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="j7-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Sealed Classes and Interfaces</span>
+                    </div>
+                    <p class="concept-description">Restrict which classes can extend/implement. permits clause defines allowed subtypes. Enables exhaustive pattern matching in switch.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">sealed</span>
+                        <span class="concept-tag">permits</span>
+                        <span class="concept-tag">Java 17+</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j7-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Pattern Matching for instanceof</span>
+                    </div>
+                    <p class="concept-description">Combine type check and cast: if (obj instanceof String s). Eliminates explicit casting. Cleaner polymorphic code.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">instanceof</span>
+                        <span class="concept-tag">Pattern</span>
+                        <span class="concept-tag">Java 16+</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j7-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Switch Expressions</span>
+                    </div>
+                    <p class="concept-description">Arrow syntax (case X -> value) returns values directly. yield for multi-line cases. Exhaustiveness checking. Much cleaner than switch statements.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">switch -></span>
+                        <span class="concept-tag">yield</span>
+                        <span class="concept-tag">Java 14+</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j7-4">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Text Blocks</span>
+                    </div>
+                    <p class="concept-description">Multiline strings with """ delimiters. Preserves formatting, handles escapes. Perfect for JSON, SQL, HTML templates in code.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">"""</span>
+                        <span class="concept-tag">Multiline</span>
+                        <span class="concept-tag">Java 15+</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good to Know - I/O and Files -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">Good to Know</span>
+                <span class="priority-title">I/O and Files</span>
+                <span class="priority-subtitle">P8</span>
+                <span class="priority-count" id="p8-count">0/3</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="j8-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">File and Path Classes (NIO.2)</span>
+                    </div>
+                    <p class="concept-description">Path for file system paths, Files for operations. Modern replacement for java.io.File. Paths.get(), Files.exists(), Files.createDirectory().</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">Path</span>
+                        <span class="concept-tag">Files</span>
+                        <span class="concept-tag">NIO.2</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j8-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Reading/Writing Files</span>
+                    </div>
+                    <p class="concept-description">Files.readString(), Files.writeString() for text. Files.readAllLines() for line-by-line. Files.lines() returns Stream for lazy processing.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">readString()</span>
+                        <span class="concept-tag">writeString()</span>
+                        <span class="concept-tag">lines()</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j8-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">BufferedReader and BufferedWriter</span>
+                    </div>
+                    <p class="concept-description">Efficient I/O with buffering. Wrap InputStreamReader/OutputStreamWriter. Use with try-with-resources for automatic closing.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">BufferedReader</span>
+                        <span class="concept-tag">BufferedWriter</span>
+                        <span class="concept-tag">Buffering</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good to Know - Generics -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">Good to Know</span>
+                <span class="priority-title">Generics</span>
+                <span class="priority-subtitle">P9</span>
+                <span class="priority-count" id="p9-count">0/3</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="j9-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Generic Classes and Methods</span>
+                    </div>
+                    <p class="concept-description">Type parameters for type-safe reusable code. class Box<T>, <T> T getValue(). Compile-time type checking, no casts needed.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">&lt;T&gt;</span>
+                        <span class="concept-tag">Type Parameter</span>
+                        <span class="concept-tag">Type Safety</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j9-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Bounded Type Parameters</span>
+                    </div>
+                    <p class="concept-description">Restrict type parameters: <T extends Comparable<T>>. Upper bounds with extends, both classes and interfaces. Multiple bounds possible.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">extends</span>
+                        <span class="concept-tag">Bounded</span>
+                        <span class="concept-tag">Comparable</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j9-3">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">Wildcards (?, extends, super)</span>
+                    </div>
+                    <p class="concept-description">? for unknown types. ? extends T for producers (read). ? super T for consumers (write). PECS: Producer Extends, Consumer Super.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">?</span>
+                        <span class="concept-tag">? extends</span>
+                        <span class="concept-tag">? super</span>
+                        <span class="concept-tag">PECS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good to Know - Advanced Concurrency -->
+        <section class="priority-section" data-priority="good">
+            <div class="priority-header">
+                <span class="priority-badge good">Good to Know</span>
+                <span class="priority-title">Advanced Concurrency</span>
+                <span class="priority-subtitle">P10</span>
+                <span class="priority-count" id="p10-count">0/2</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card good" data-id="j10-1">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">synchronized and volatile</span>
+                    </div>
+                    <p class="concept-description">synchronized blocks/methods for mutual exclusion. volatile ensures visibility across threads. Understand happens-before relationships.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">synchronized</span>
+                        <span class="concept-tag">volatile</span>
+                        <span class="concept-tag">Thread Safety</span>
+                    </div>
+                </div>
+
+                <div class="concept-card good" data-id="j10-2">
+                    <div class="concept-header">
+                        <label class="concept-checkbox">
+                            <input type="checkbox" onchange="updateProgress()">
+                            <span class="concept-checkmark"></span>
+                        </label>
+                        <span class="concept-title">CompletableFuture</span>
+                    </div>
+                    <p class="concept-description">Async programming with chaining. thenApply(), thenCompose() for transformations. exceptionally() for error handling. Combines multiple futures.</p>
+                    <div class="concept-tags">
+                        <span class="concept-tag">CompletableFuture</span>
+                        <span class="concept-tag">thenApply()</span>
+                        <span class="concept-tag">Async</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Built for learning Java | <a href="https://docs.oracle.com/en/java/" target="_blank">Java Documentation</a> | <a href="https://dev.java/learn/" target="_blank">Dev.java Learn</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize state from localStorage
+        function loadState() {
+            const checkboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                const saved = localStorage.getItem('java-core-' + id);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    card.classList.add('checked');
+                }
+            });
+            updateProgress();
+        }
+
+        // Save state to localStorage
+        function saveState(id, checked) {
+            localStorage.setItem('java-core-' + id, checked);
+        }
+
+        // Filter concepts by priority
+        function filterConcepts(filter) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide sections
+            const sections = document.querySelectorAll('.priority-section');
+            
+            sections.forEach(section => {
+                const priority = section.dataset.priority;
+                
+                if (filter === 'all') {
+                    section.classList.remove('hidden');
+                } else if (filter === priority) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+
+        // Update progress
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('.concept-card input[type="checkbox"]');
+            const total = allCheckboxes.length;
+            let completed = 0;
+
+            // Update individual cards and count
+            allCheckboxes.forEach(checkbox => {
+                const card = checkbox.closest('.concept-card');
+                const id = card.dataset.id;
+                
+                if (checkbox.checked) {
+                    completed++;
+                    card.classList.add('checked');
+                } else {
+                    card.classList.remove('checked');
+                }
+                
+                saveState(id, checkbox.checked);
+            });
+
+            // Update overall progress
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('percent-complete').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+
+            // Update priority section counts
+            const priorities = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
+            priorities.forEach(priority => {
+                const cards = document.querySelectorAll(`.concept-card[data-id^="j${priority.substring(1)}-"]`);
+                const sectionTotal = cards.length;
+                let sectionCompleted = 0;
+                
+                cards.forEach(card => {
+                    const checkbox = card.querySelector('input[type="checkbox"]');
+                    if (checkbox && checkbox.checked) sectionCompleted++;
+                });
+                
+                const countElement = document.getElementById(`${priority}-count`);
+                if (countElement) {
+                    countElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadState);
+    </script>
+</body>
+</html>
