@@ -378,25 +378,34 @@ const GitHubSync = {
         }
         
         try {
-            // Request device code (using CORS proxy for browser compatibility)
-            const corsProxy = 'https://corsproxy.io/?';
-            const response = await fetch(corsProxy + encodeURIComponent('https://github.com/login/device/code'), {
+            // Request device code using proxy that supports POST
+            const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://github.com/login/device/code');
+            
+            console.log('Requesting device code from:', proxyUrl);
+            
+            const response = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: JSON.stringify({
-                    client_id: GITHUB_CONFIG.clientId,
-                    scope: 'repo'
-                })
+                body: `client_id=${GITHUB_CONFIG.clientId}&scope=repo`
             });
             
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
-                throw new Error('Failed to get device code');
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                throw new Error('Failed to get device code: ' + response.status);
             }
             
             const data = await response.json();
+            console.log('Device code response:', data);
+            
+            if (data.error) {
+                throw new Error(data.error_description || data.error);
+            }
             
             // Show modal with device code
             this.showDeviceFlowModal(data);
@@ -407,7 +416,7 @@ const GitHubSync = {
         } catch (error) {
             console.error('Device flow error:', error);
             this.updateUI('error', 'Auth failed');
-            alert('Failed to start GitHub authentication. Check console for details.');
+            alert('Failed to start GitHub authentication.\n\nError: ' + error.message + '\n\nCheck browser console (F12) for details.');
         }
     },
     
@@ -452,23 +461,19 @@ const GitHubSync = {
     
     async pollForAuthorization(deviceCode, interval) {
         this.deviceFlowCancelled = false;
-        const corsProxy = 'https://corsproxy.io/?';
         
         const poll = async () => {
             if (this.deviceFlowCancelled) return;
             
             try {
-                const response = await fetch(corsProxy + encodeURIComponent('https://github.com/login/oauth/access_token'), {
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://github.com/login/oauth/access_token');
+                const response = await fetch(proxyUrl, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: JSON.stringify({
-                        client_id: GITHUB_CONFIG.clientId,
-                        device_code: deviceCode,
-                        grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
-                    })
+                    body: `client_id=${GITHUB_CONFIG.clientId}&device_code=${deviceCode}&grant_type=urn:ietf:params:oauth:grant-type:device_code`
                 });
                 
                 const data = await response.json();
