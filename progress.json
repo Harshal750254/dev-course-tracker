@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-31T07:51:58.360Z",
+  "lastUpdated": "2026-02-13T16:56:01.105Z",
   "completed": 1,
   "total": 114,
   "items": {
@@ -15,10 +15,10 @@
     "springboot-checklist-w6-3": false,
     "springboot-checklist-w5-2": false,
     "postgresql-p0-3": false,
-    "springboot-checklist-w2-2": false,
     "postgresql-p6-2": false,
     "fastapi-checklist-w4-7": false,
     "fastapi-checklist-w6-3": false,
+    "springboot-checklist-w2-2": false,
     "fastapi-checklist-w4-6": false,
     "postgresql-p1-1": false,
     "postgresql-p4-3": false,
@@ -43,8 +43,8 @@
     "fastapi-checklist-w3-4": false,
     "springboot-checklist-w3-4": false,
     "springboot-checklist-w6-4": false,
-    "postgresql-p4-1": false,
     "postgresql-p2-3": false,
+    "postgresql-p4-1": false,
     "fastapi-checklist-w1-6": false,
     "fastapi-checklist-w3-1": false,
     "springboot-checklist-w1-8": false,
