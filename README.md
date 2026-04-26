@@ -3,7 +3,7 @@
 A collection of learning roadmaps and checklists for various development technologies with **GitHub-synced progress tracking**.
 
 <!-- Dynamic Progress Badge - Updates automatically when progress.json changes -->
-![Overall Progress](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/Harshal750254/Planning/main/progress.json&query=$.completed&suffix=%20completed&label=Overall%20Progress&color=6366f1)
+![Overall Progress](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/Harshal750254/dev-course-tracker/main/progress.json&query=$.completed&suffix=%20completed&label=Overall%20Progress&color=6366f1)
 
 ## Contents
 
@@ -40,8 +40,8 @@ To enable automatic progress syncing to your GitHub repository:
 2. Click **"New OAuth App"**
 3. Fill in the details:
    - **Application name**: `Dev Course Progress App` (or any name)
-   - **Homepage URL**: `https://Harshal750254.github.io/Planning`
-   - **Authorization callback URL**: `https://Harshal750254.github.io/Planning`
+   - **Homepage URL**: `https://Harshal750254.github.io/dev-course-tracker/`
+   - **Authorization callback URL**: `https://Harshal750254.github.io/dev-course-tracker/`
    - **Enable Device Flow**: Check this checkbox!
 4. Click **"Register application"**
 5. Copy the **Client ID** (you won't need the Client Secret for Device Flow)
@@ -54,7 +54,7 @@ Edit `python-fastapi/Website/github-sync.js` AND `java-springboot/Website/github
 const GITHUB_CONFIG = {
     clientId: 'YOUR_CLIENT_ID_HERE',      // Paste the Client ID from step 1
     owner: 'Harshal750254',               // Already set
-    repo: 'Planning',                      // Already set
+    repo: 'dev-course-tracker',            // Already set
     progressPath: 'progress.json',         // Shared progress file at root
     branch: 'main'
 };
@@ -70,7 +70,7 @@ To access your tracker from anywhere:
 2. Under "Source", select **"Deploy from a branch"**
 3. Select `main` branch and `/ (root)` folder
 4. Click **Save**
-5. Your site will be live at `https://Harshal750254.github.io/Planning`
+5. Your site will be live at `https://Harshal750254.github.io/dev-course-tracker/`
 
 ### 4. Sign In
 
@@ -86,7 +86,7 @@ Open the HTML files in your browser to access the interactive learning materials
 ## Structure
 
 ```
-Planning/
+dev-course-tracker/
 ├── index.html              # Main landing page
 ├── progress.json           # Shared progress data (synced to GitHub)
 ├── README.md

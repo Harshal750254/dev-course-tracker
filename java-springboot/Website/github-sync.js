@@ -9,8 +9,8 @@
  * 2. Click "New OAuth App"
  * 3. Fill in:
  *    - Application name: Learning Tracker (or any name)
- *    - Homepage URL: https://yourusername.github.io/Planning
- *    - Authorization callback URL: https://yourusername.github.io/Planning
+ *    - Homepage URL: https://yourusername.github.io/dev-course-tracker/
+ *    - Authorization callback URL: https://yourusername.github.io/dev-course-tracker/
  * 4. After creation, copy the Client ID
  * 5. Replace GITHUB_CLIENT_ID below with your Client ID
  */
